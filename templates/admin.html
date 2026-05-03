@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GNG Tech CMS - Admin Paneli</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+        .navbar {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+        .logout-btn {
+            color: white;
+            text-decoration: none;
+            background-color: #e74c3c;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+        .container {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-top: 20px;
+        }
+        .card h2 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <h1>GNG Tech CMS Admin</h1>
+        <a href="{{ url_for('logout') }}" class="logout-btn">Çıkış Yap</a>
+    </div>
+
+    <div class="container">
+        <h2>Hoş Geldiniz, Admin!</h2>
+        
+        <div class="card">
+            <h2>Sistem Durumu</h2>
+            <p>Sisteminiz başarıyla bir Flask uygulamasına dönüştürüldü ve MySQL Veritabanı bağlantısı yapılandırıldı.</p>
+            <p>Şu anda geliştirme aşamasındayız. İlerleyen zamanlarda buraya projeler, blog yazıları veya sayfaları yönetebileceğiniz dinamik formlar eklenecektir.</p>
+            <br>
+            <a href="{{ url_for('index') }}" style="color: #007bff; text-decoration: none;">&larr; Ana Siteye Dön</a>
+        </div>
+    </div>
+
+</body>
+</html>
