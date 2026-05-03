@@ -1553,16 +1553,14 @@
             <div class="row g-5 align-items-end">
                 <div class="col-lg-7">
                     <h1 class="hero__title">
-                        <span data-i18n="hero.title.line1">Imaging the</span><br>
-                        <em data-i18n="hero.title.line2">invisible.</em>
+                        <span data-i18n="hero.title.line1">{{ hero.title_line1_en if hero else "Imaging the" }}</span><br>
+                        <em data-i18n="hero.title.line2">{{ hero.title_line2_en if hero else "invisible." }}</em>
                     </h1>
                 </div>
                 <div class="col-lg-5">
-                    <div class="hero__caption-meta" data-i18n="hero.location">METU Technopark · Ankara</div>
+                    <div class="hero__caption-meta" data-i18n="hero.location">{{ hero.location_en if hero else "METU Technopark · Ankara" }}</div>
                     <p class="hero__caption" data-i18n="hero.caption">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt
-                        ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                        ullamco laboris nisi ut aliquip ex ea commodo.
+                        {{ hero.caption_en if hero else "Lorem ipsum dolor sit amet..." }}
                     </p>
                     <div class="hero__cta-row">
                         <a href="#technology" class="btn-gng btn-gng--primary">
@@ -2100,10 +2098,10 @@
                 'nav.contact': 'Contact',
                 'nav.cta': 'Request Demo',
 
-                'hero.title.line1': 'Imaging the',
-                'hero.title.line2': 'invisible.',
-                'hero.location': 'METU Technopark · Ankara',
-                'hero.caption': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
+                'hero.title.line1': {{ hero.title_line1_en | tojson if hero else '"Imaging the"' }},
+                'hero.title.line2': {{ hero.title_line2_en | tojson if hero else '"invisible."' }},
+                'hero.location': {{ hero.location_en | tojson if hero else '"METU Technopark · Ankara"' }},
+                'hero.caption': {{ hero.caption_en | tojson if hero else '"Lorem ipsum dolor sit amet..."' }},
                 'hero.cta.primary': 'Explore Technology',
                 'hero.cta.secondary': 'Watch Showreel',
                 'hero.scroll': 'Scroll',
@@ -2182,10 +2180,10 @@
                 'nav.contact': 'İletişim',
                 'nav.cta': 'Demo Talep Et',
 
-                'hero.title.line1': 'Görünmeyeni',
-                'hero.title.line2': 'görüntülemek.',
-                'hero.location': 'ODTÜ Teknokent · Ankara',
-                'hero.caption': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
+                'hero.title.line1': {{ hero.title_line1_tr | tojson if hero else '"Görünmeyeni"' }},
+                'hero.title.line2': {{ hero.title_line2_tr | tojson if hero else '"görüntülemek."' }},
+                'hero.location': {{ hero.location_tr | tojson if hero else '"ODTÜ Teknokent · Ankara"' }},
+                'hero.caption': {{ hero.caption_tr | tojson if hero else '"Lorem ipsum dolor sit amet..."' }},
                 'hero.cta.primary': 'Teknolojiyi Keşfet',
                 'hero.cta.secondary': 'Tanıtım Filmi',
                 'hero.scroll': 'Aşağı Kaydır',
