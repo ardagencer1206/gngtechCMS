@@ -50,6 +50,60 @@
         .card h2 {
             margin-top: 0;
             color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .btn-submit {
+            background-color: #27ae60;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .btn-submit:hover {
+            background-color: #2ecc71;
+        }
+        .flash-message {
+            padding: 15px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        h3 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            color: #2980b9;
         }
     </style>
 </head>
@@ -63,11 +117,65 @@
     <div class="container">
         <h2>Hoş Geldiniz, Admin!</h2>
         
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         <div class="card">
-            <h2>Sistem Durumu</h2>
-            <p>Sisteminiz başarıyla bir Flask uygulamasına dönüştürüldü ve MySQL Veritabanı bağlantısı yapılandırıldı.</p>
-            <p>Şu anda geliştirme aşamasındayız. İlerleyen zamanlarda buraya projeler, blog yazıları veya sayfaları yönetebileceğiniz dinamik formlar eklenecektir.</p>
-            <br>
+            <h2>Hero İçeriği (Ana Sayfa İlk Kısım)</h2>
+            <form method="POST" action="{{ url_for('admin') }}">
+                {{ form.hidden_tag() }}
+                
+                <div class="form-grid">
+                    <div>
+                        <h3>Türkçe (TR)</h3>
+                        <div class="form-group">
+                            {{ form.title_line1_tr.label }}
+                            {{ form.title_line1_tr(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.title_line2_tr.label }}
+                            {{ form.title_line2_tr(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.location_tr.label }}
+                            {{ form.location_tr(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.caption_tr.label }}
+                            {{ form.caption_tr(class="form-control") }}
+                        </div>
+                    </div>
+                    <div>
+                        <h3>English (EN)</h3>
+                        <div class="form-group">
+                            {{ form.title_line1_en.label }}
+                            {{ form.title_line1_en(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.title_line2_en.label }}
+                            {{ form.title_line2_en(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.location_en.label }}
+                            {{ form.location_en(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.caption_en.label }}
+                            {{ form.caption_en(class="form-control") }}
+                        </div>
+                    </div>
+                </div>
+                
+                {{ form.submit(class="btn-submit") }}
+            </form>
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
             <a href="{{ url_for('index') }}" style="color: #007bff; text-decoration: none;">&larr; Ana Siteye Dön</a>
         </div>
     </div>
