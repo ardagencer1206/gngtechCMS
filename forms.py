@@ -31,3 +31,23 @@ class JobPostingForm(FlaskForm):
     requirements_en = TextAreaField('Yetkinlikler (EN)', validators=[DataRequired()])
     is_active = BooleanField('Aktif İlan', default=True)
     submit = SubmitField('Kaydet')
+
+class LeadershipContentForm(FlaskForm):
+    title_a_tr = StringField('Başlık Kısım 1 (TR)', validators=[DataRequired()])
+    title_a_en = StringField('Başlık Kısım 1 (EN)', validators=[DataRequired()])
+    title_b_tr = StringField('Başlık Kısım 2 (TR)', validators=[DataRequired()])
+    title_b_en = StringField('Başlık Kısım 2 (EN)', validators=[DataRequired()])
+    intro_tr = TextAreaField('Açıklama (TR)', validators=[DataRequired()])
+    intro_en = TextAreaField('Açıklama (EN)', validators=[DataRequired()])
+    submit = SubmitField('Güncelle')
+
+class LeadershipMemberForm(FlaskForm):
+    order_num = StringField('Sıra No (örn: 001)', validators=[DataRequired()])
+    initials = StringField('İnisiyaller (örn: LI)', validators=[DataRequired()])
+    name = StringField('İsim ve Unvan', validators=[DataRequired()])
+    role_tr = StringField('Rol (TR)', validators=[DataRequired()])
+    role_en = StringField('Rol (EN)', validators=[DataRequired()])
+    bio_tr = TextAreaField('Biyografi (TR)', validators=[DataRequired()])
+    bio_en = TextAreaField('Biyografi (EN)', validators=[DataRequired()])
+    is_active = BooleanField('Aktif', default=True)
+    submit = SubmitField('Kaydet')
