@@ -1489,11 +1489,12 @@
                 </a>
 
                 <ul class="gng-nav__links" id="navLinks">
-                    <li><a href="#technology" data-i18n="nav.technology">Technology</a></li>
-                    <li><a href="#articles" data-i18n="nav.insights">Insights</a></li>
-                    <li><a href="#gallery" data-i18n="nav.gallery">Gallery</a></li>
-                    <li><a href="#leadership" data-i18n="nav.leadership">Leadership</a></li>
-                    <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
+                    <li><a href="{{ url_for('index') }}#technology" data-i18n="nav.technology">Technology</a></li>
+                    <li><a href="{{ url_for('index') }}#articles" data-i18n="nav.insights">Insights</a></li>
+                    <li><a href="{{ url_for('index') }}#gallery" data-i18n="nav.gallery">Gallery</a></li>
+                    <li><a href="{{ url_for('index') }}#leadership" data-i18n="nav.leadership">Leadership</a></li>
+                    <li><a href="{{ url_for('career') }}" data-i18n="nav.careers">Careers</a></li>
+                    <li><a href="{{ url_for('index') }}#contact" data-i18n="nav.contact">Contact</a></li>
                 </ul>
 
                 <div class="gng-nav__tools">
@@ -1517,7 +1518,7 @@
                         </svg>
                     </button>
 
-                    <a href="#contact" class="nav__cta">
+                    <a href="{{ url_for('index') }}#contact" class="nav__cta">
                         <span data-i18n="nav.cta">Request Demo</span>
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                             <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.4"
@@ -1602,9 +1603,9 @@
                             <h5 data-i18n="footer.col.company">Company</h5>
                             <ul>
                                 <li><a href="#" data-i18n="footer.link.about">About</a></li>
-                                <li><a href="#technology" data-i18n="nav.technology">Technology</a></li>
-                                <li><a href="#articles" data-i18n="nav.insights">Insights</a></li>
-                                <li><a href="#leadership" data-i18n="nav.leadership">Leadership</a></li>
+                                <li><a href="{{ url_for('index') }}#technology" data-i18n="nav.technology">Technology</a></li>
+                                <li><a href="{{ url_for('index') }}#articles" data-i18n="nav.insights">Insights</a></li>
+                                <li><a href="{{ url_for('index') }}#leadership" data-i18n="nav.leadership">Leadership</a></li>
                             </ul>
                         </div>
                         <div class="footer__col">
@@ -1650,6 +1651,7 @@
                 'nav.insights': 'Insights',
                 'nav.gallery': 'Gallery',
                 'nav.leadership': 'Leadership',
+                'nav.careers': 'Careers',
                 'nav.contact': 'Contact',
                 'nav.cta': 'Request Demo',
 
@@ -1738,6 +1740,7 @@
                 'nav.insights': 'İçgörüler',
                     'nav.gallery': 'Galeri',
                         'nav.leadership': 'Ekibimiz',
+                            'nav.careers': 'Kariyer',
                             'nav.contact': 'İletişim',
                                 'nav.cta': 'Demo Talep Et',
 
