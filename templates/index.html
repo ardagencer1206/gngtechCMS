@@ -1553,12 +1553,14 @@
             <div class="row g-5 align-items-end">
                 <div class="col-lg-7">
                     <h1 class="hero__title">
-                        <span data-i18n="hero.title.line1">{{ hero.title_line1_en if hero else "Imaging the" }}</span><br>
+                        <span data-i18n="hero.title.line1">{{ hero.title_line1_en if hero else "Imaging the"
+                            }}</span><br>
                         <em data-i18n="hero.title.line2">{{ hero.title_line2_en if hero else "invisible." }}</em>
                     </h1>
                 </div>
                 <div class="col-lg-5">
-                    <div class="hero__caption-meta" data-i18n="hero.location">{{ hero.location_en if hero else "METU Technopark · Ankara" }}</div>
+                    <div class="hero__caption-meta" data-i18n="hero.location">{{ hero.location_en if hero else "METU
+                        Technopark · Ankara" }}</div>
                     <p class="hero__caption" data-i18n="hero.caption">
                         {{ hero.caption_en if hero else "Lorem ipsum dolor sit amet..." }}
                     </p>
@@ -1570,8 +1572,7 @@
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </a>
-                        <a href="#contact" class="btn-gng btn-gng--ghost" data-i18n="hero.cta.secondary">Watch
-                            Showreel</a>
+                        <a href="{{ url_for('career') }}" class="btn-gng btn-gng--ghost" data-i18n="hero.cta.secondary">Careers</a>
                     </div>
                 </div>
             </div>
@@ -1611,7 +1612,8 @@
                 <article class="patent">
                     <div class="patent__num">
                         <span>{{ p.patent_num }}</span>
-                        <span class="badge-gng" data-i18n="patent.status.{{ p.status }}">{{ p.status|capitalize }}</span>
+                        <span class="badge-gng" data-i18n="patent.status.{{ p.status }}">{{ p.status|capitalize
+                            }}</span>
                     </div>
                     <svg class="patent__arrow" viewBox="0 0 22 22" fill="none">
                         <path d="M5 17L17 5M17 5H7M17 5v10" stroke="currentColor" stroke-width="1.4"
@@ -2030,168 +2032,168 @@
                 'nav.cta': 'Request Demo',
 
                 'hero.title.line1': {{ hero.title_line1_en | tojson if hero else '"Imaging the"' }},
-                'hero.title.line2': {{ hero.title_line2_en | tojson if hero else '"invisible."' }},
-                'hero.location': {{ hero.location_en | tojson if hero else '"METU Technopark · Ankara"' }},
-                'hero.caption': {{ hero.caption_en | tojson if hero else '"Lorem ipsum dolor sit amet..."' }},
-                'hero.cta.primary': 'Explore Technology',
-                'hero.cta.secondary': 'Watch Showreel',
+        'hero.title.line2': {{ hero.title_line2_en | tojson if hero else '"invisible."' }},
+        'hero.location': {{ hero.location_en | tojson if hero else '"METU Technopark · Ankara"' }},
+        'hero.caption': {{ hero.caption_en | tojson if hero else '"Lorem ipsum dolor sit amet..."' }},
+        'hero.cta.primary': 'Explore Technology',
+            'hero.cta.secondary': 'Careers',
                 'hero.scroll': 'Scroll',
-                'hero.tagline': '© GNG Technology · Patented Imaging Systems',
+                    'hero.tagline': '© GNG Technology · Patented Imaging Systems',
 
-                'tech.label': '01 — Technology',
-                'tech.title.a': 'Patents that',
-                'tech.title.b': 'see further.',
-                'tech.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua — quis nostrud exercitation ullamco laboris.',
+                        'tech.label': '01 — Technology',
+                            'tech.title.a': 'Patents that',
+                                'tech.title.b': 'see further.',
+                                    'tech.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua — quis nostrud exercitation ullamco laboris.',
 
-                'patent.status.granted': 'Granted',
-                'patent.status.pending': 'Pending',
-                'patent.status.filed': 'Filed',
-                {% for p in patents %}
-                'patent_{{ p.id }}_title': {{ p.title_en | tojson }},
-                'patent_{{ p.id }}_desc': {{ p.desc_en | tojson }},
-                {% endfor %}
+                                        'patent.status.granted': 'Granted',
+                                            'patent.status.pending': 'Pending',
+                                                'patent.status.filed': 'Filed',
+                                                    {% for p in patents %}
+        'patent_{{ p.id }}_title': {{ p.title_en | tojson }},
+        'patent_{{ p.id }}_desc': {{ p.desc_en | tojson }},
+        {% endfor %}
 
-                'articles.label': '02 — Insights',
-                'articles.title.a': 'Research,',
+        'articles.label': '02 — Insights',
+            'articles.title.a': 'Research,',
                 'articles.title.b': 'published.',
-                'articles.intro': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore.',
-                'articles.cat.whitepaper': 'Whitepaper',
-                'articles.cat.case': 'Case Study',
-                'articles.cat.press': 'Press',
-                'articles.cat.article': 'Article',
-                'articles.cat.research': 'Research',
-                'articles.read1': '14 min read',
+                    'articles.intro': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore.',
+                        'articles.cat.whitepaper': 'Whitepaper',
+                            'articles.cat.case': 'Case Study',
+                                'articles.cat.press': 'Press',
+                                    'articles.cat.article': 'Article',
+                                        'articles.cat.research': 'Research',
+                                            'articles.read1': '14 min read',
 
-                'gallery.label': '03 — Visual Archive',
-                'gallery.title.a': 'From the',
-                'gallery.title.b': 'scanner.',
-                'gallery.intro': 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos.',
+                                                'gallery.label': '03 — Visual Archive',
+                                                    'gallery.title.a': 'From the',
+                                                        'gallery.title.b': 'scanner.',
+                                                            'gallery.intro': 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos.',
 
-                'people.label': '04 — Leadership',
-                'people.title.a': 'The minds',
-                'people.title.b': 'behind it.',
-                'people.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.',
-                'people.role.ceo': 'CEO · Co-founder',
-                'people.role.cto': 'CTO · Co-founder',
-                'people.role.science': 'Chief Scientist',
-                'people.role.eng': 'Head of Engineering',
-                'people.role.clinical': 'Clinical Lead',
-                'people.role.regulatory': 'Head of Regulatory',
-                'people.role.product': 'VP, Product',
-                'people.role.research': 'Director, Research',
+                                                                'people.label': '04 — Leadership',
+                                                                    'people.title.a': 'The minds',
+                                                                        'people.title.b': 'behind it.',
+                                                                            'people.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.',
+                                                                                'people.role.ceo': 'CEO · Co-founder',
+                                                                                    'people.role.cto': 'CTO · Co-founder',
+                                                                                        'people.role.science': 'Chief Scientist',
+                                                                                            'people.role.eng': 'Head of Engineering',
+                                                                                                'people.role.clinical': 'Clinical Lead',
+                                                                                                    'people.role.regulatory': 'Head of Regulatory',
+                                                                                                        'people.role.product': 'VP, Product',
+                                                                                                            'people.role.research': 'Director, Research',
 
-                'contact.label': '05 — Contact',
-                'contact.title.a': "Let's",
-                'contact.title.b': 'talk.',
-                'contact.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam.',
-                'contact.headline.a': 'METU Technopark,',
-                'contact.headline.b': 'Ankara.',
-                'contact.address.label': 'Address',
-                'contact.address.value': 'METU Technopark, Block A · No 12<br>Üniversiteler Mh. · Çankaya<br>06800 Ankara · Türkiye',
-                'contact.general.label': 'General Inquiries',
-                'contact.press.label': 'Press & Partnerships',
-                'contact.phone.label': 'Phone',
-                'contact.coords.label': 'Coordinates',
-                'map.pin.title': '● GNG · METU Technopark',
-                'map.pin.sub': 'Block A · 39.8917° N · 32.7833° E',
+                                                                                                                'contact.label': '05 — Contact',
+                                                                                                                    'contact.title.a': "Let's",
+                                                                                                                        'contact.title.b': 'talk.',
+                                                                                                                            'contact.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam.',
+                                                                                                                                'contact.headline.a': 'METU Technopark,',
+                                                                                                                                    'contact.headline.b': 'Ankara.',
+                                                                                                                                        'contact.address.label': 'Address',
+                                                                                                                                            'contact.address.value': 'METU Technopark, Block A · No 12<br>Üniversiteler Mh. · Çankaya<br>06800 Ankara · Türkiye',
+                                                                                                                                                'contact.general.label': 'General Inquiries',
+                                                                                                                                                    'contact.press.label': 'Press & Partnerships',
+                                                                                                                                                        'contact.phone.label': 'Phone',
+                                                                                                                                                            'contact.coords.label': 'Coordinates',
+                                                                                                                                                                'map.pin.title': '● GNG · METU Technopark',
+                                                                                                                                                                    'map.pin.sub': 'Block A · 39.8917° N · 32.7833° E',
 
-                'footer.tagline': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Patented medical imaging systems engineered at METU Technopark.',
-                'footer.col.company': 'Company',
-                'footer.col.resources': 'Resources',
-                'footer.col.connect': 'Connect',
-                'footer.link.about': 'About',
-                'footer.link.patents': 'Patents',
-                'footer.link.whitepapers': 'Whitepapers',
-                'footer.link.press': 'Press Kit',
-                'footer.link.careers': 'Careers',
-                'footer.copyright': '© 2026 GNG Technology · All rights reserved',
-                'footer.made': 'Made at METU Technopark · Ankara'
+                                                                                                                                                                        'footer.tagline': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Patented medical imaging systems engineered at METU Technopark.',
+                                                                                                                                                                            'footer.col.company': 'Company',
+                                                                                                                                                                                'footer.col.resources': 'Resources',
+                                                                                                                                                                                    'footer.col.connect': 'Connect',
+                                                                                                                                                                                        'footer.link.about': 'About',
+                                                                                                                                                                                            'footer.link.patents': 'Patents',
+                                                                                                                                                                                                'footer.link.whitepapers': 'Whitepapers',
+                                                                                                                                                                                                    'footer.link.press': 'Press Kit',
+                                                                                                                                                                                                        'footer.link.careers': 'Careers',
+                                                                                                                                                                                                            'footer.copyright': '© 2026 GNG Technology · All rights reserved',
+                                                                                                                                                                                                                'footer.made': 'Made at METU Technopark · Ankara'
             },
-            tr: {
-                'nav.technology': 'Teknoloji',
+        tr: {
+            'nav.technology': 'Teknoloji',
                 'nav.insights': 'İçgörüler',
-                'nav.gallery': 'Galeri',
-                'nav.leadership': 'Ekibimiz',
-                'nav.contact': 'İletişim',
-                'nav.cta': 'Demo Talep Et',
+                    'nav.gallery': 'Galeri',
+                        'nav.leadership': 'Ekibimiz',
+                            'nav.contact': 'İletişim',
+                                'nav.cta': 'Demo Talep Et',
 
-                'hero.title.line1': {{ hero.title_line1_tr | tojson if hero else '"Görünmeyeni"' }},
-                'hero.title.line2': {{ hero.title_line2_tr | tojson if hero else '"görüntülemek."' }},
-                'hero.location': {{ hero.location_tr | tojson if hero else '"ODTÜ Teknokent · Ankara"' }},
-                'hero.caption': {{ hero.caption_tr | tojson if hero else '"Lorem ipsum dolor sit amet..."' }},
-                'hero.cta.primary': 'Teknolojiyi Keşfet',
-                'hero.cta.secondary': 'Tanıtım Filmi',
-                'hero.scroll': 'Aşağı Kaydır',
-                'hero.tagline': '© GNG Technology · Patentli Görüntüleme Sistemleri',
+                                    'hero.title.line1': {{ hero.title_line1_tr | tojson if hero else '"Görünmeyeni"' }},
+            'hero.title.line2': {{ hero.title_line2_tr | tojson if hero else '"görüntülemek."' }},
+            'hero.location': {{ hero.location_tr | tojson if hero else '"ODTÜ Teknokent · Ankara"' }},
+            'hero.caption': {{ hero.caption_tr | tojson if hero else '"Lorem ipsum dolor sit amet..."' }},
+            'hero.cta.primary': 'Teknolojiyi Keşfet',
+                'hero.cta.secondary': 'Kariyer',
+                    'hero.scroll': 'Aşağı Kaydır',
+                        'hero.tagline': '© GNG Technology · Patentli Görüntüleme Sistemleri',
 
-                'tech.label': '01 — Teknoloji',
-                'tech.title.a': 'Daha ilerisini',
-                'tech.title.b': 'gören patentler.',
-                'tech.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua — quis nostrud exercitation ullamco laboris.',
+                            'tech.label': '01 — Teknoloji',
+                                'tech.title.a': 'Daha ilerisini',
+                                    'tech.title.b': 'gören patentler.',
+                                        'tech.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua — quis nostrud exercitation ullamco laboris.',
 
-                'patent.status.granted': 'Tescilli',
-                'patent.status.pending': 'Beklemede',
-                'patent.status.filed': 'Başvuru',
-                {% for p in patents %}
-                'patent_{{ p.id }}_title': {{ p.title_tr | tojson }},
-                'patent_{{ p.id }}_desc': {{ p.desc_tr | tojson }},
-                {% endfor %}
+                                            'patent.status.granted': 'Tescilli',
+                                                'patent.status.pending': 'Beklemede',
+                                                    'patent.status.filed': 'Başvuru',
+                                                        {% for p in patents %}
+        'patent_{{ p.id }}_title': {{ p.title_tr | tojson }},
+        'patent_{{ p.id }}_desc': {{ p.desc_tr | tojson }},
+        {% endfor %}
 
-                'articles.label': '02 — İçgörüler',
-                'articles.title.a': 'Yayımlanmış',
+        'articles.label': '02 — İçgörüler',
+            'articles.title.a': 'Yayımlanmış',
                 'articles.title.b': 'araştırmalar.',
-                'articles.intro': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore.',
-                'articles.cat.whitepaper': 'Teknik Rapor',
-                'articles.cat.case': 'Vaka Çalışması',
-                'articles.cat.press': 'Basın',
-                'articles.cat.article': 'Makale',
-                'articles.cat.research': 'Araştırma',
-                'articles.read1': '14 dk okuma',
+                    'articles.intro': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore.',
+                        'articles.cat.whitepaper': 'Teknik Rapor',
+                            'articles.cat.case': 'Vaka Çalışması',
+                                'articles.cat.press': 'Basın',
+                                    'articles.cat.article': 'Makale',
+                                        'articles.cat.research': 'Araştırma',
+                                            'articles.read1': '14 dk okuma',
 
-                'gallery.label': '03 — Görsel Arşiv',
-                'gallery.title.a': 'Tarayıcıdan',
-                'gallery.title.b': 'kareler.',
-                'gallery.intro': 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos.',
+                                                'gallery.label': '03 — Görsel Arşiv',
+                                                    'gallery.title.a': 'Tarayıcıdan',
+                                                        'gallery.title.b': 'kareler.',
+                                                            'gallery.intro': 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos.',
 
-                'people.label': '04 — Ekibimiz',
-                'people.title.a': 'Arkasındaki',
-                'people.title.b': 'zihinler.',
-                'people.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.',
-                'people.role.ceo': 'CEO · Kurucu Ortak',
-                'people.role.cto': 'CTO · Kurucu Ortak',
-                'people.role.science': 'Bilimsel Direktör',
-                'people.role.eng': 'Mühendislik Direktörü',
-                'people.role.clinical': 'Klinik Lider',
-                'people.role.regulatory': 'Regülasyon Direktörü',
-                'people.role.product': 'Ürün Başkan Yrd.',
-                'people.role.research': 'Araştırma Direktörü',
+                                                                'people.label': '04 — Ekibimiz',
+                                                                    'people.title.a': 'Arkasındaki',
+                                                                        'people.title.b': 'zihinler.',
+                                                                            'people.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.',
+                                                                                'people.role.ceo': 'CEO · Kurucu Ortak',
+                                                                                    'people.role.cto': 'CTO · Kurucu Ortak',
+                                                                                        'people.role.science': 'Bilimsel Direktör',
+                                                                                            'people.role.eng': 'Mühendislik Direktörü',
+                                                                                                'people.role.clinical': 'Klinik Lider',
+                                                                                                    'people.role.regulatory': 'Regülasyon Direktörü',
+                                                                                                        'people.role.product': 'Ürün Başkan Yrd.',
+                                                                                                            'people.role.research': 'Araştırma Direktörü',
 
-                'contact.label': '05 — İletişim',
-                'contact.title.a': 'Hadi',
-                'contact.title.b': 'konuşalım.',
-                'contact.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam.',
-                'contact.headline.a': 'ODTÜ Teknokent,',
-                'contact.headline.b': 'Ankara.',
-                'contact.address.label': 'Adres',
-                'contact.address.value': 'ODTÜ Teknokent, A Blok · No 12<br>Üniversiteler Mh. · Çankaya<br>06800 Ankara · Türkiye',
-                'contact.general.label': 'Genel İletişim',
-                'contact.press.label': 'Basın & İş Birlikleri',
-                'contact.phone.label': 'Telefon',
-                'contact.coords.label': 'Koordinatlar',
-                'map.pin.title': '● GNG · ODTÜ Teknokent',
-                'map.pin.sub': 'A Blok · 39.8917° K · 32.7833° D',
+                                                                                                                'contact.label': '05 — İletişim',
+                                                                                                                    'contact.title.a': 'Hadi',
+                                                                                                                        'contact.title.b': 'konuşalım.',
+                                                                                                                            'contact.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam.',
+                                                                                                                                'contact.headline.a': 'ODTÜ Teknokent,',
+                                                                                                                                    'contact.headline.b': 'Ankara.',
+                                                                                                                                        'contact.address.label': 'Adres',
+                                                                                                                                            'contact.address.value': 'ODTÜ Teknokent, A Blok · No 12<br>Üniversiteler Mh. · Çankaya<br>06800 Ankara · Türkiye',
+                                                                                                                                                'contact.general.label': 'Genel İletişim',
+                                                                                                                                                    'contact.press.label': 'Basın & İş Birlikleri',
+                                                                                                                                                        'contact.phone.label': 'Telefon',
+                                                                                                                                                            'contact.coords.label': 'Koordinatlar',
+                                                                                                                                                                'map.pin.title': '● GNG · ODTÜ Teknokent',
+                                                                                                                                                                    'map.pin.sub': 'A Blok · 39.8917° K · 32.7833° D',
 
-                'footer.tagline': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ODTÜ Teknokent\'te geliştirilen patentli tıbbi görüntüleme sistemleri.',
-                'footer.col.company': 'Şirket',
-                'footer.col.resources': 'Kaynaklar',
-                'footer.col.connect': 'Bağlan',
-                'footer.link.about': 'Hakkımızda',
-                'footer.link.patents': 'Patentler',
-                'footer.link.whitepapers': 'Teknik Raporlar',
-                'footer.link.press': 'Basın Kiti',
-                'footer.link.careers': 'Kariyer',
-                'footer.copyright': '© 2026 GNG Technology · Tüm hakları saklıdır',
-                'footer.made': 'ODTÜ Teknokent\'te üretildi · Ankara'
+                                                                                                                                                                        'footer.tagline': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ODTÜ Teknokent\'te geliştirilen patentli tıbbi görüntüleme sistemleri.',
+                                                                                                                                                                            'footer.col.company': 'Şirket',
+                                                                                                                                                                                'footer.col.resources': 'Kaynaklar',
+                                                                                                                                                                                    'footer.col.connect': 'Bağlan',
+                                                                                                                                                                                        'footer.link.about': 'Hakkımızda',
+                                                                                                                                                                                            'footer.link.patents': 'Patentler',
+                                                                                                                                                                                                'footer.link.whitepapers': 'Teknik Raporlar',
+                                                                                                                                                                                                    'footer.link.press': 'Basın Kiti',
+                                                                                                                                                                                                        'footer.link.careers': 'Kariyer',
+                                                                                                                                                                                                            'footer.copyright': '© 2026 GNG Technology · Tüm hakları saklıdır',
+                                                                                                                                                                                                                'footer.made': 'ODTÜ Teknokent\'te üretildi · Ankara'
             }
         };
 
