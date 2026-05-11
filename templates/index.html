@@ -1573,7 +1573,8 @@
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </a>
-                        <a href="{{ url_for('career') }}" class="btn-gng btn-gng--ghost" data-i18n="hero.cta.secondary">Careers</a>
+                        <a href="{{ url_for('career') }}" class="btn-gng btn-gng--ghost"
+                            data-i18n="hero.cta.secondary">Careers</a>
                     </div>
                 </div>
             </div>
@@ -1787,89 +1788,26 @@
                 <div class="col-lg-7">
                     <div class="section-label"><span data-i18n="people.label">04 — Leadership</span></div>
                     <h2 class="module__title">
-                        <span data-i18n="people.title.a">The minds</span> <em data-i18n="people.title.b">behind it.</em>
+                        <span data-i18n="people.title.a">{{ leadership_content.title_a_en if leadership_content else "The minds" }}</span> <em data-i18n="people.title.b">{{ leadership_content.title_b_en if leadership_content else "behind it." }}</em>
                     </h2>
                 </div>
                 <div class="col-lg-5">
                     <p class="module__intro" data-i18n="people.intro">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nemo enim ipsam voluptatem
-                        quia voluptas sit aspernatur aut odit aut fugit.
+                        {{ leadership_content.intro_en if leadership_content else "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit." }}
                     </p>
                 </div>
             </div>
 
             <div class="people reveal">
+                {% for member in leadership_members %}
                 <article class="person">
-                    <span class="person__num">001</span>
-                    <div class="person__avatar"><span class="person__initials">LI</span></div>
-                    <h3 class="person__name">Lorem Ipsum, PhD</h3>
-                    <div class="person__role" data-i18n="people.role.ceo">CEO · Co-founder</div>
-                    <p class="person__bio">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium.
-                    </p>
+                    <span class="person__num">{{ member.order_num }}</span>
+                    <div class="person__avatar"><span class="person__initials">{{ member.initials }}</span></div>
+                    <h3 class="person__name">{{ member.name }}</h3>
+                    <div class="person__role" data-i18n="member_{{ member.id }}_role">{{ member.role_en }}</div>
+                    <p class="person__bio" data-i18n="member_{{ member.id }}_bio">{{ member.bio_en }}</p>
                 </article>
-
-                <article class="person">
-                    <span class="person__num">002</span>
-                    <div class="person__avatar"><span class="person__initials">DA</span></div>
-                    <h3 class="person__name">Dolor Amet, MD</h3>
-                    <div class="person__role" data-i18n="people.role.cto">CTO · Co-founder</div>
-                    <p class="person__bio">Doloremque laudantium totam rem aperiam eaque ipsa quae ab illo inventore.
-                    </p>
-                </article>
-
-                <article class="person">
-                    <span class="person__num">003</span>
-                    <div class="person__avatar"><span class="person__initials">CA</span></div>
-                    <h3 class="person__name">Consectetur Adipi</h3>
-                    <div class="person__role" data-i18n="people.role.science">Chief Scientist</div>
-                    <p class="person__bio">Veritatis et quasi architecto beatae vitae dicta sunt explicabo nemo enim.
-                    </p>
-                </article>
-
-                <article class="person">
-                    <span class="person__num">004</span>
-                    <div class="person__avatar"><span class="person__initials">EU</span></div>
-                    <h3 class="person__name">Eiusmod Ut Labore</h3>
-                    <div class="person__role" data-i18n="people.role.eng">Head of Engineering</div>
-                    <p class="person__bio">Voluptatem quia voluptas sit aspernatur aut odit aut fugit sed quia
-                        consequuntur.</p>
-                </article>
-
-                <article class="person">
-                    <span class="person__num">005</span>
-                    <div class="person__avatar"><span class="person__initials">QN</span></div>
-                    <h3 class="person__name">Quis Nostrud, MSc</h3>
-                    <div class="person__role" data-i18n="people.role.clinical">Clinical Lead</div>
-                    <p class="person__bio">Magni dolores eos qui ratione voluptatem sequi nesciunt neque porro quisquam.
-                    </p>
-                </article>
-
-                <article class="person">
-                    <span class="person__num">006</span>
-                    <div class="person__avatar"><span class="person__initials">EX</span></div>
-                    <h3 class="person__name">Exercitation Ull.</h3>
-                    <div class="person__role" data-i18n="people.role.regulatory">Head of Regulatory</div>
-                    <p class="person__bio">Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis
-                        suscipit.</p>
-                </article>
-
-                <article class="person">
-                    <span class="person__num">007</span>
-                    <div class="person__avatar"><span class="person__initials">AL</span></div>
-                    <h3 class="person__name">Aliquip Ex Ea</h3>
-                    <div class="person__role" data-i18n="people.role.product">VP, Product</div>
-                    <p class="person__bio">Laboriosam nisi ut aliquid ex ea commodi consequatur quis autem vel eum iure.
-                    </p>
-                </article>
-
-                <article class="person">
-                    <span class="person__num">008</span>
-                    <div class="person__avatar"><span class="person__initials">RV</span></div>
-                    <h3 class="person__name">Reprehender V.</h3>
-                    <div class="person__role" data-i18n="people.role.research">Director, Research</div>
-                    <p class="person__bio">Voluptate velit esse quam nihil molestiae consequatur vel illum qui dolorem.
-                    </p>
-                </article>
+                {% endfor %}
             </div>
         </div>
     </section>
@@ -2034,9 +1972,9 @@
                 'nav.cta': 'Request Demo',
 
                 'hero.title.line1': {{ hero.title_line1_en | tojson if hero else '"Imaging the"' }},
-        'hero.title.line2': {{ hero.title_line2_en | tojson if hero else '"invisible."' }},
-        'hero.location': {{ hero.location_en | tojson if hero else '"METU Technopark · Ankara"' }},
-        'hero.caption': {{ hero.caption_en | tojson if hero else '"Lorem ipsum dolor sit amet..."' }},
+        'hero.title.line2': { { hero.title_line2_en | tojson if hero else '"invisible."' } },
+        'hero.location': { { hero.location_en | tojson if hero else '"METU Technopark · Ankara"' } },
+        'hero.caption': { { hero.caption_en | tojson if hero else '"Lorem ipsum dolor sit amet..."' } },
         'hero.cta.primary': 'Explore Technology',
             'hero.cta.secondary': 'Careers',
                 'hero.scroll': 'Scroll',
@@ -2051,8 +1989,8 @@
                                             'patent.status.pending': 'Pending',
                                                 'patent.status.filed': 'Filed',
                                                     {% for p in patents %}
-        'patent_{{ p.id }}_title': {{ p.title_en | tojson }},
-        'patent_{{ p.id }}_desc': {{ p.desc_en | tojson }},
+        'patent_{{ p.id }}_title': { { p.title_en | tojson } },
+        'patent_{{ p.id }}_desc': { { p.desc_en | tojson } },
         {% endfor %}
 
         'articles.label': '02 — Insights',
@@ -2072,17 +2010,13 @@
                                                             'gallery.intro': 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos.',
 
                                                                 'people.label': '04 — Leadership',
-                                                                    'people.title.a': 'The minds',
-                                                                        'people.title.b': 'behind it.',
-                                                                            'people.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.',
-                                                                                'people.role.ceo': 'CEO · Co-founder',
-                                                                                    'people.role.cto': 'CTO · Co-founder',
-                                                                                        'people.role.science': 'Chief Scientist',
-                                                                                            'people.role.eng': 'Head of Engineering',
-                                                                                                'people.role.clinical': 'Clinical Lead',
-                                                                                                    'people.role.regulatory': 'Head of Regulatory',
-                                                                                                        'people.role.product': 'VP, Product',
-                                                                                                            'people.role.research': 'Director, Research',
+                                                                    'people.title.a': {{ leadership_content.title_a_en | tojson if leadership_content else '"The minds"' }},
+                                                                        'people.title.b': {{ leadership_content.title_b_en | tojson if leadership_content else '"behind it."' }},
+                                                                            'people.intro': {{ leadership_content.intro_en | tojson if leadership_content else '"Lorem ipsum dolor sit amet, consectetur adipiscing elit."' }},
+                                                                                {% for member in leadership_members %}
+                                                                                'member_{{ member.id }}_role': {{ member.role_en | tojson }},
+                                                                                'member_{{ member.id }}_bio': {{ member.bio_en | tojson }},
+                                                                                {% endfor %}
 
                                                                                                                 'contact.label': '05 — Contact',
                                                                                                                     'contact.title.a': "Let's",
@@ -2117,13 +2051,13 @@
                     'nav.gallery': 'Galeri',
                         'nav.leadership': 'Ekibimiz',
                             'nav.careers': 'Kariyer',
-                            'nav.contact': 'İletişim',
-                                'nav.cta': 'Demo Talep Et',
+                                'nav.contact': 'İletişim',
+                                    'nav.cta': 'Demo Talep Et',
 
-                                    'hero.title.line1': {{ hero.title_line1_tr | tojson if hero else '"Görünmeyeni"' }},
-            'hero.title.line2': {{ hero.title_line2_tr | tojson if hero else '"görüntülemek."' }},
-            'hero.location': {{ hero.location_tr | tojson if hero else '"ODTÜ Teknokent · Ankara"' }},
-            'hero.caption': {{ hero.caption_tr | tojson if hero else '"Lorem ipsum dolor sit amet..."' }},
+                                        'hero.title.line1': { { hero.title_line1_tr | tojson if hero else '"Görünmeyeni"' } },
+            'hero.title.line2': { { hero.title_line2_tr | tojson if hero else '"görüntülemek."' } },
+            'hero.location': { { hero.location_tr | tojson if hero else '"ODTÜ Teknokent · Ankara"' } },
+            'hero.caption': { { hero.caption_tr | tojson if hero else '"Lorem ipsum dolor sit amet..."' } },
             'hero.cta.primary': 'Teknolojiyi Keşfet',
                 'hero.cta.secondary': 'Kariyer',
                     'hero.scroll': 'Aşağı Kaydır',
@@ -2138,8 +2072,8 @@
                                                 'patent.status.pending': 'Beklemede',
                                                     'patent.status.filed': 'Başvuru',
                                                         {% for p in patents %}
-        'patent_{{ p.id }}_title': {{ p.title_tr | tojson }},
-        'patent_{{ p.id }}_desc': {{ p.desc_tr | tojson }},
+        'patent_{{ p.id }}_title': { { p.title_tr | tojson } },
+        'patent_{{ p.id }}_desc': { { p.desc_tr | tojson } },
         {% endfor %}
 
         'articles.label': '02 — İçgörüler',
@@ -2159,17 +2093,13 @@
                                                             'gallery.intro': 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos.',
 
                                                                 'people.label': '04 — Ekibimiz',
-                                                                    'people.title.a': 'Arkasındaki',
-                                                                        'people.title.b': 'zihinler.',
-                                                                            'people.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.',
-                                                                                'people.role.ceo': 'CEO · Kurucu Ortak',
-                                                                                    'people.role.cto': 'CTO · Kurucu Ortak',
-                                                                                        'people.role.science': 'Bilimsel Direktör',
-                                                                                            'people.role.eng': 'Mühendislik Direktörü',
-                                                                                                'people.role.clinical': 'Klinik Lider',
-                                                                                                    'people.role.regulatory': 'Regülasyon Direktörü',
-                                                                                                        'people.role.product': 'Ürün Başkan Yrd.',
-                                                                                                            'people.role.research': 'Araştırma Direktörü',
+                                                                    'people.title.a': {{ leadership_content.title_a_tr | tojson if leadership_content else '"Arkasındaki"' }},
+                                                                        'people.title.b': {{ leadership_content.title_b_tr | tojson if leadership_content else '"zihinler."' }},
+                                                                            'people.intro': {{ leadership_content.intro_tr | tojson if leadership_content else '"Lorem ipsum dolor sit amet, consectetur adipiscing elit."' }},
+                                                                                {% for member in leadership_members %}
+                                                                                'member_{{ member.id }}_role': {{ member.role_tr | tojson }},
+                                                                                'member_{{ member.id }}_bio': {{ member.bio_tr | tojson }},
+                                                                                {% endfor %}
 
                                                                                                                 'contact.label': '05 — İletişim',
                                                                                                                     'contact.title.a': 'Hadi',
