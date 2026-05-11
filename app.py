@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-from models import db, HeroContent
-from forms import HeroContentForm
+from models import db, HeroContent, Patent
+from forms import HeroContentForm, PatentForm
 
 app = Flask(__name__)
 
@@ -29,13 +29,26 @@ with app.app_context():
         default_hero = HeroContent()
         db.session.add(default_hero)
         db.session.commit()
+        
+    if not Patent.query.first():
+        default_patents = [
+            Patent(patent_num='PATENT · TR-2024/0001', status='granted', title_tr='Lorem ipsum dolor sit amet adipiscing.', title_en='Lorem ipsum dolor sit amet adipiscing.', desc_tr='Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', desc_en='Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
+            Patent(patent_num='PATENT · WO-2024/0042', status='pending', title_tr='Ut enim ad minim veniam quis nostrud.', title_en='Ut enim ad minim veniam quis nostrud.', desc_tr='Exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure.', desc_en='Exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure.'),
+            Patent(patent_num='PATENT · EP-2024/0078', status='granted', title_tr='Duis aute irure dolor in reprehenderit.', title_en='Duis aute irure dolor in reprehenderit.', desc_tr='In voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat.', desc_en='In voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat.'),
+            Patent(patent_num='PATENT · US-2024/0119', status='pending', title_tr='Cupidatat non proident sunt in culpa.', title_en='Cupidatat non proident sunt in culpa.', desc_tr='Qui officia deserunt mollit anim id est laborum sed ut perspiciatis unde omnis iste natus.', desc_en='Qui officia deserunt mollit anim id est laborum sed ut perspiciatis unde omnis iste natus.'),
+            Patent(patent_num='PATENT · TR-2025/0203', status='filed', title_tr='Error sit voluptatem accusantium doloremque.', title_en='Error sit voluptatem accusantium doloremque.', desc_tr='Laudantium totam rem aperiam eaque ipsa quae ab illo inventore veritatis et quasi.', desc_en='Laudantium totam rem aperiam eaque ipsa quae ab illo inventore veritatis et quasi.'),
+            Patent(patent_num='PATENT · WO-2025/0314', status='pending', title_tr='Architecto beatae vitae dicta sunt explicabo.', title_en='Architecto beatae vitae dicta sunt explicabo.', desc_tr='Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit consequuntur.', desc_en='Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit consequuntur.')
+        ]
+        db.session.bulk_save_objects(default_patents)
+        db.session.commit()
 
 # --- ROTASLAR (ROUTES) ---
 
 @app.route('/')
 def index():
     hero = HeroContent.query.first()
-    return render_template('index.html', hero=hero)
+    patents = Patent.query.all()
+    return render_template('index.html', hero=hero, patents=patents)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -69,7 +82,51 @@ def admin():
         flash('Hero içeriği başarıyla güncellendi!')
         return redirect(url_for('admin'))
         
-    return render_template('admin.html', form=form)
+    patents = Patent.query.all()
+    return render_template('admin.html', form=form, patents=patents)
+
+@app.route('/admin/patent/add', methods=['GET', 'POST'])
+def admin_patent_add():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+        
+    form = PatentForm()
+    if form.validate_on_submit():
+        patent = Patent()
+        form.populate_obj(patent)
+        db.session.add(patent)
+        db.session.commit()
+        flash('Yeni patent başarıyla eklendi!')
+        return redirect(url_for('admin'))
+        
+    return render_template('admin_patent.html', form=form, action="Ekle")
+
+@app.route('/admin/patent/edit/<int:id>', methods=['GET', 'POST'])
+def admin_patent_edit(id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+        
+    patent = Patent.query.get_or_404(id)
+    form = PatentForm(obj=patent)
+    
+    if form.validate_on_submit():
+        form.populate_obj(patent)
+        db.session.commit()
+        flash('Patent başarıyla güncellendi!')
+        return redirect(url_for('admin'))
+        
+    return render_template('admin_patent.html', form=form, action="Düzenle", patent=patent)
+
+@app.route('/admin/patent/delete/<int:id>', methods=['POST'])
+def admin_patent_delete(id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+        
+    patent = Patent.query.get_or_404(id)
+    db.session.delete(patent)
+    db.session.commit()
+    flash('Patent başarıyla silindi!')
+    return redirect(url_for('admin'))
 
 @app.route('/logout')
 def logout():
