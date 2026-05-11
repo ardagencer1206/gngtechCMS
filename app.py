@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-from models import db, HeroContent, Patent, JobPosting
-from forms import HeroContentForm, PatentForm, JobPostingForm
+from models import db, HeroContent, Patent, JobPosting, LeadershipContent, LeadershipMember
+from forms import HeroContentForm, PatentForm, JobPostingForm, LeadershipContentForm, LeadershipMemberForm
 
 app = Flask(__name__)
 
@@ -42,13 +42,33 @@ with app.app_context():
         db.session.bulk_save_objects(default_patents)
         db.session.commit()
 
+    if not LeadershipContent.query.first():
+        default_leadership = LeadershipContent()
+        db.session.add(default_leadership)
+        db.session.commit()
+
+    if not LeadershipMember.query.first():
+        default_member = LeadershipMember(
+            order_num="001",
+            initials="LI",
+            name="Lorem Ipsum, PhD",
+            role_tr="CEO · Kurucu Ortak",
+            role_en="CEO · Co-founder",
+            bio_tr="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium.",
+            bio_en="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium."
+        )
+        db.session.add(default_member)
+        db.session.commit()
+
 # --- ROTASLAR (ROUTES) ---
 
 @app.route('/')
 def index():
     hero = HeroContent.query.first()
     patents = Patent.query.all()
-    return render_template('index.html', hero=hero, patents=patents)
+    leadership_content = LeadershipContent.query.first()
+    leadership_members = LeadershipMember.query.filter_by(is_active=True).all()
+    return render_template('index.html', hero=hero, patents=patents, leadership_content=leadership_content, leadership_members=leadership_members)
 
 @app.route('/career')
 def career():
@@ -88,9 +108,13 @@ def admin():
         flash('Hero içeriği başarıyla güncellendi!')
         return redirect(url_for('admin'))
         
+    leadership_content = LeadershipContent.query.first()
+    leadership_form = LeadershipContentForm(obj=leadership_content)
+    
     patents = Patent.query.all()
     jobs = JobPosting.query.all()
-    return render_template('admin.html', form=form, patents=patents, jobs=jobs)
+    leadership_members = LeadershipMember.query.all()
+    return render_template('admin.html', form=form, patents=patents, jobs=jobs, leadership_form=leadership_form, leadership_members=leadership_members)
 
 @app.route('/admin/patent/add', methods=['GET', 'POST'])
 def admin_patent_add():
@@ -177,6 +201,65 @@ def admin_career_delete(id):
     db.session.commit()
     flash('İş ilanı başarıyla silindi!')
     return redirect(url_for('admin'))
+
+@app.route('/admin/leadership_content/edit', methods=['POST'])
+def admin_leadership_content_edit():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+        
+    leadership_content = LeadershipContent.query.first()
+    form = LeadershipContentForm()
+    
+    if form.validate_on_submit():
+        form.populate_obj(leadership_content)
+        db.session.commit()
+        flash('Liderlik giriş metni başarıyla güncellendi!')
+        
+    return redirect(url_for('admin'))
+
+@app.route('/admin/leadership/add', methods=['GET', 'POST'])
+def admin_leadership_add():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+        
+    form = LeadershipMemberForm()
+    if form.validate_on_submit():
+        member = LeadershipMember()
+        form.populate_obj(member)
+        db.session.add(member)
+        db.session.commit()
+        flash('Yeni ekip üyesi başarıyla eklendi!')
+        return redirect(url_for('admin'))
+        
+    return render_template('admin_leadership.html', form=form, action="Ekle")
+
+@app.route('/admin/leadership/edit/<int:id>', methods=['GET', 'POST'])
+def admin_leadership_edit(id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+        
+    member = LeadershipMember.query.get_or_404(id)
+    form = LeadershipMemberForm(obj=member)
+    
+    if form.validate_on_submit():
+        form.populate_obj(member)
+        db.session.commit()
+        flash('Ekip üyesi başarıyla güncellendi!')
+        return redirect(url_for('admin'))
+        
+    return render_template('admin_leadership.html', form=form, action="Düzenle")
+
+@app.route('/admin/leadership/delete/<int:id>', methods=['POST'])
+def admin_leadership_delete(id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+        
+    member = LeadershipMember.query.get_or_404(id)
+    db.session.delete(member)
+    db.session.commit()
+    flash('Ekip üyesi başarıyla silindi!')
+    return redirect(url_for('admin'))
+
 
 @app.route('/logout')
 def logout():
