@@ -52,8 +52,9 @@ def index():
 
 @app.route('/career')
 def career():
+    hero = HeroContent.query.first()
     jobs = JobPosting.query.filter_by(is_active=True).all()
-    return render_template('career.html', jobs=jobs)
+    return render_template('career.html', hero=hero, jobs=jobs)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
