@@ -176,6 +176,93 @@
         </div>
 
         <div class="card" style="margin-top: 20px;">
+            <h2>Leadership İçeriği (Yönetim Bölümü)</h2>
+            <form method="POST" action="{{ url_for('admin_leadership_content_edit') }}">
+                {{ leadership_form.hidden_tag() }}
+                
+                <div class="form-grid">
+                    <div>
+                        <h3>Türkçe (TR)</h3>
+                        <div class="form-group">
+                            {{ leadership_form.title_a_tr.label }}
+                            {{ leadership_form.title_a_tr(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ leadership_form.title_b_tr.label }}
+                            {{ leadership_form.title_b_tr(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ leadership_form.intro_tr.label }}
+                            {{ leadership_form.intro_tr(class="form-control") }}
+                        </div>
+                    </div>
+                    <div>
+                        <h3>English (EN)</h3>
+                        <div class="form-group">
+                            {{ leadership_form.title_a_en.label }}
+                            {{ leadership_form.title_a_en(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ leadership_form.title_b_en.label }}
+                            {{ leadership_form.title_b_en(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ leadership_form.intro_en.label }}
+                            {{ leadership_form.intro_en(class="form-control") }}
+                        </div>
+                    </div>
+                </div>
+                
+                {{ leadership_form.submit(class="btn-submit") }}
+            </form>
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0;">Ekip Üyeleri (Leadership)</h2>
+                <a href="{{ url_for('admin_leadership_add') }}" class="btn-submit" style="margin-top: 0; text-decoration: none;">Yeni Üye Ekle</a>
+            </div>
+            
+            {% if leadership_members %}
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #eee;">
+                        <th style="padding: 12px 8px;">Sıra</th>
+                        <th style="padding: 12px 8px;">İsim</th>
+                        <th style="padding: 12px 8px;">Rol (TR)</th>
+                        <th style="padding: 12px 8px;">Durum</th>
+                        <th style="padding: 12px 8px;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in leadership_members %}
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 12px 8px;">{{ member.order_num }}</td>
+                        <td style="padding: 12px 8px;">{{ member.name }}</td>
+                        <td style="padding: 12px 8px;">{{ member.role_tr }}</td>
+                        <td style="padding: 12px 8px;">
+                            {% if member.is_active %}
+                            <span style="color: #27ae60; font-weight: bold;">Aktif</span>
+                            {% else %}
+                            <span style="color: #e74c3c; font-weight: bold;">Pasif</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 12px 8px; display: flex; gap: 10px;">
+                            <a href="{{ url_for('admin_leadership_edit', id=member.id) }}" style="color: #2980b9; text-decoration: none; font-weight: bold;">Düzenle</a>
+                            <form action="{{ url_for('admin_leadership_delete', id=member.id) }}" method="POST" style="margin: 0;" onsubmit="return confirm('Bu ekip üyesini silmek istediğinize emin misiniz?');">
+                                <button type="submit" style="background: none; border: none; color: #e74c3c; cursor: pointer; padding: 0; font-weight: bold; font-family: inherit; font-size: inherit;">Sil</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>Kayıtlı ekip üyesi bulunmamaktadır.</p>
+            {% endif %}
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2 style="margin: 0;">Patentler</h2>
                 <a href="{{ url_for('admin_patent_add') }}" class="btn-submit" style="margin-top: 0; text-decoration: none;">Yeni Patent Ekle</a>
