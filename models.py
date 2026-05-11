@@ -21,3 +21,13 @@ class Patent(db.Model):
     title_en = db.Column(db.String(255), nullable=False)
     desc_tr = db.Column(db.Text, nullable=False)
     desc_en = db.Column(db.Text, nullable=False)
+
+class JobPosting(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title_tr = db.Column(db.String(255), nullable=False)
+    title_en = db.Column(db.String(255), nullable=False)
+    description_tr = db.Column(db.Text, nullable=False)
+    description_en = db.Column(db.Text, nullable=False)
+    requirements_tr = db.Column(db.Text, nullable=False)
+    requirements_en = db.Column(db.Text, nullable=False)
+    is_active = db.Column(db.Boolean, default=True)
