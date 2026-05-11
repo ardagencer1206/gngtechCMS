@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField
+from wtforms import StringField, TextAreaField, SubmitField, SelectField
 from wtforms.validators import DataRequired
 
 class HeroContentForm(FlaskForm):
@@ -12,3 +12,12 @@ class HeroContentForm(FlaskForm):
     caption_tr = TextAreaField('Açıklama (TR)', validators=[DataRequired()])
     caption_en = TextAreaField('Açıklama (EN)', validators=[DataRequired()])
     submit = SubmitField('Güncelle')
+
+class PatentForm(FlaskForm):
+    patent_num = StringField('Patent No (örn: PATENT · TR-2024/0001)', validators=[DataRequired()])
+    status = SelectField('Durum', choices=[('granted', 'Tescilli'), ('pending', 'Beklemede'), ('filed', 'Başvuru')], validators=[DataRequired()])
+    title_tr = StringField('Başlık (TR)', validators=[DataRequired()])
+    title_en = StringField('Başlık (EN)', validators=[DataRequired()])
+    desc_tr = TextAreaField('Açıklama (TR)', validators=[DataRequired()])
+    desc_en = TextAreaField('Açıklama (EN)', validators=[DataRequired()])
+    submit = SubmitField('Kaydet')
