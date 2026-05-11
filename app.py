@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-from models import db, HeroContent, Patent
-from forms import HeroContentForm, PatentForm
+from models import db, HeroContent, Patent, JobPosting
+from forms import HeroContentForm, PatentForm, JobPostingForm
 
 app = Flask(__name__)
 
@@ -50,6 +50,11 @@ def index():
     patents = Patent.query.all()
     return render_template('index.html', hero=hero, patents=patents)
 
+@app.route('/career')
+def career():
+    jobs = JobPosting.query.filter_by(is_active=True).all()
+    return render_template('career.html', jobs=jobs)
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if session.get('logged_in'):
@@ -83,7 +88,8 @@ def admin():
         return redirect(url_for('admin'))
         
     patents = Patent.query.all()
-    return render_template('admin.html', form=form, patents=patents)
+    jobs = JobPosting.query.all()
+    return render_template('admin.html', form=form, patents=patents, jobs=jobs)
 
 @app.route('/admin/patent/add', methods=['GET', 'POST'])
 def admin_patent_add():
@@ -126,6 +132,49 @@ def admin_patent_delete(id):
     db.session.delete(patent)
     db.session.commit()
     flash('Patent başarıyla silindi!')
+    return redirect(url_for('admin'))
+
+@app.route('/admin/career/add', methods=['GET', 'POST'])
+def admin_career_add():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+        
+    form = JobPostingForm()
+    if form.validate_on_submit():
+        job = JobPosting()
+        form.populate_obj(job)
+        db.session.add(job)
+        db.session.commit()
+        flash('Yeni iş ilanı başarıyla eklendi!')
+        return redirect(url_for('admin'))
+        
+    return render_template('admin_career.html', form=form, action="Ekle")
+
+@app.route('/admin/career/edit/<int:id>', methods=['GET', 'POST'])
+def admin_career_edit(id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+        
+    job = JobPosting.query.get_or_404(id)
+    form = JobPostingForm(obj=job)
+    
+    if form.validate_on_submit():
+        form.populate_obj(job)
+        db.session.commit()
+        flash('İş ilanı başarıyla güncellendi!')
+        return redirect(url_for('admin'))
+        
+    return render_template('admin_career.html', form=form, action="Düzenle")
+
+@app.route('/admin/career/delete/<int:id>', methods=['POST'])
+def admin_career_delete(id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+        
+    job = JobPosting.query.get_or_404(id)
+    db.session.delete(job)
+    db.session.commit()
+    flash('İş ilanı başarıyla silindi!')
     return redirect(url_for('admin'))
 
 @app.route('/logout')
