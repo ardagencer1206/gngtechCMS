@@ -12,3 +12,12 @@ class HeroContent(db.Model):
     location_en = db.Column(db.String(100), nullable=False, default="METU Technopark · Ankara")
     caption_tr = db.Column(db.Text, nullable=False, default="Lorem ipsum dolor sit amet...")
     caption_en = db.Column(db.Text, nullable=False, default="Lorem ipsum dolor sit amet...")
+
+class Patent(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    patent_num = db.Column(db.String(100), nullable=False)
+    status = db.Column(db.String(50), nullable=False)
+    title_tr = db.Column(db.String(255), nullable=False)
+    title_en = db.Column(db.String(255), nullable=False)
+    desc_tr = db.Column(db.Text, nullable=False)
+    desc_en = db.Column(db.Text, nullable=False)
