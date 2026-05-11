@@ -1607,89 +1607,20 @@
             </div>
 
             <div class="patents reveal">
+                {% for p in patents %}
                 <article class="patent">
                     <div class="patent__num">
-                        <span>PATENT · TR-2024/0001</span>
-                        <span class="badge-gng" data-i18n="patent.status.granted">Granted</span>
+                        <span>{{ p.patent_num }}</span>
+                        <span class="badge-gng" data-i18n="patent.status.{{ p.status }}">{{ p.status|capitalize }}</span>
                     </div>
                     <svg class="patent__arrow" viewBox="0 0 22 22" fill="none">
                         <path d="M5 17L17 5M17 5H7M17 5v10" stroke="currentColor" stroke-width="1.4"
                             stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    <h3 class="patent__title">Lorem ipsum dolor sit amet adipiscing.</h3>
-                    <p class="patent__desc">Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                        dolore magna aliqua.</p>
+                    <h3 class="patent__title" data-i18n="patent_{{ p.id }}_title">{{ p.title_en }}</h3>
+                    <p class="patent__desc" data-i18n="patent_{{ p.id }}_desc">{{ p.desc_en }}</p>
                 </article>
-
-                <article class="patent">
-                    <div class="patent__num">
-                        <span>PATENT · WO-2024/0042</span>
-                        <span class="badge-gng" data-i18n="patent.status.pending">Pending</span>
-                    </div>
-                    <svg class="patent__arrow" viewBox="0 0 22 22" fill="none">
-                        <path d="M5 17L17 5M17 5H7M17 5v10" stroke="currentColor" stroke-width="1.4"
-                            stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <h3 class="patent__title">Ut enim ad minim veniam quis nostrud.</h3>
-                    <p class="patent__desc">Exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis
-                        aute irure.</p>
-                </article>
-
-                <article class="patent">
-                    <div class="patent__num">
-                        <span>PATENT · EP-2024/0078</span>
-                        <span class="badge-gng" data-i18n="patent.status.granted">Granted</span>
-                    </div>
-                    <svg class="patent__arrow" viewBox="0 0 22 22" fill="none">
-                        <path d="M5 17L17 5M17 5H7M17 5v10" stroke="currentColor" stroke-width="1.4"
-                            stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <h3 class="patent__title">Duis aute irure dolor in reprehenderit.</h3>
-                    <p class="patent__desc">In voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur
-                        sint occaecat.</p>
-                </article>
-
-                <article class="patent">
-                    <div class="patent__num">
-                        <span>PATENT · US-2024/0119</span>
-                        <span class="badge-gng" data-i18n="patent.status.pending">Pending</span>
-                    </div>
-                    <svg class="patent__arrow" viewBox="0 0 22 22" fill="none">
-                        <path d="M5 17L17 5M17 5H7M17 5v10" stroke="currentColor" stroke-width="1.4"
-                            stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <h3 class="patent__title">Cupidatat non proident sunt in culpa.</h3>
-                    <p class="patent__desc">Qui officia deserunt mollit anim id est laborum sed ut perspiciatis unde
-                        omnis iste natus.</p>
-                </article>
-
-                <article class="patent">
-                    <div class="patent__num">
-                        <span>PATENT · TR-2025/0203</span>
-                        <span class="badge-gng" data-i18n="patent.status.filed">Filed</span>
-                    </div>
-                    <svg class="patent__arrow" viewBox="0 0 22 22" fill="none">
-                        <path d="M5 17L17 5M17 5H7M17 5v10" stroke="currentColor" stroke-width="1.4"
-                            stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <h3 class="patent__title">Error sit voluptatem accusantium doloremque.</h3>
-                    <p class="patent__desc">Laudantium totam rem aperiam eaque ipsa quae ab illo inventore veritatis et
-                        quasi.</p>
-                </article>
-
-                <article class="patent">
-                    <div class="patent__num">
-                        <span>PATENT · WO-2025/0314</span>
-                        <span class="badge-gng" data-i18n="patent.status.pending">Pending</span>
-                    </div>
-                    <svg class="patent__arrow" viewBox="0 0 22 22" fill="none">
-                        <path d="M5 17L17 5M17 5H7M17 5v10" stroke="currentColor" stroke-width="1.4"
-                            stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <h3 class="patent__title">Architecto beatae vitae dicta sunt explicabo.</h3>
-                    <p class="patent__desc">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit
-                        consequuntur.</p>
-                </article>
+                {% endfor %}
             </div>
         </div>
     </section>
@@ -2115,6 +2046,10 @@
                 'patent.status.granted': 'Granted',
                 'patent.status.pending': 'Pending',
                 'patent.status.filed': 'Filed',
+                {% for p in patents %}
+                'patent_{{ p.id }}_title': {{ p.title_en | tojson }},
+                'patent_{{ p.id }}_desc': {{ p.desc_en | tojson }},
+                {% endfor %}
 
                 'articles.label': '02 — Insights',
                 'articles.title.a': 'Research,',
@@ -2197,6 +2132,10 @@
                 'patent.status.granted': 'Tescilli',
                 'patent.status.pending': 'Beklemede',
                 'patent.status.filed': 'Başvuru',
+                {% for p in patents %}
+                'patent_{{ p.id }}_title': {{ p.title_tr | tojson }},
+                'patent_{{ p.id }}_desc': {{ p.desc_tr | tojson }},
+                {% endfor %}
 
                 'articles.label': '02 — İçgörüler',
                 'articles.title.a': 'Yayımlanmış',
