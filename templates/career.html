@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GNG Technology — Medical Imaging, Reimagined</title>
+    <meta name="description"
+        content="GNG Technology builds patented medical imaging systems at METU Technopark, Ankara." />
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=DM+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        /* =========================================
+       TOKENS — DARK (default) + LIGHT
+    ========================================= */
+        :root,
+        [data-bs-theme="dark"] {
+            --bg: #0a0d12;
+            --bg-elev: #10151d;
+            --bg-card: #141a23;
+            --ink: #ece6d8;
+            --ink-mute: #8b92a3;
+            --ink-faint: #4a5160;
+            --accent: #5fe9d0;
+            --accent-warm: #ffb547;
+            --line: rgba(236, 230, 216, 0.08);
+            --line-strong: rgba(236, 230, 216, 0.18);
+            --line-accent: rgba(95, 233, 208, 0.35);
+            --hero-grad-1: #0a1218;
+            --hero-grad-2: #060a10;
+            --noise-blend: overlay;
+            --noise-opacity: 0.5;
+        }
+
+        [data-bs-theme="light"] {
+            --bg: #f5f1e8;
+            --bg-elev: #ffffff;
+            --bg-card: #faf6ec;
+            --ink: #0a0d12;
+            --ink-mute: #5a5e6e;
+            --ink-faint: #b0b4be;
+            --accent: #00a890;
+            --accent-warm: #d97706;
+            --line: rgba(10, 13, 18, 0.08);
+            --line-strong: rgba(10, 13, 18, 0.16);
+            --line-accent: rgba(0, 168, 144, 0.4);
+            --hero-grad-1: #ece4d3;
+            --hero-grad-2: #f5f1e8;
+            --noise-blend: multiply;
+            --noise-opacity: 0.25;
+        }
+
+        :root {
+            --font-display: 'Fraunces', 'Times New Roman', serif;
+            --font-body: 'DM Sans', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+            --gutter: clamp(20px, 4vw, 56px);
+            --max-w: 1440px;
+            --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        /* =========================================
+       BASE
+    ========================================= */
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.55;
+            background: var(--bg);
+            color: var(--ink);
+            overflow-x: hidden;
+            font-feature-settings: 'ss01', 'ss02';
+            transition: background 0.6s var(--ease), color 0.6s var(--ease);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font: inherit;
+            color: inherit;
+        }
+
+        img,
+        video,
+        iframe {
+            max-width: 100%;
+            display: block;
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .wrap {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding-inline: var(--gutter);
+            width: 100%;
+        }
+
+        .mono {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 400;
+        }
+
+        .section-label {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--ink-mute);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+
+        .section-label::before {
+            content: '';
+            width: 36px;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+        }
+
+        .reveal.in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* =========================================
+       NAV
+    ========================================= */
+        .gng-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+            background: color-mix(in srgb, var(--bg) 78%, transparent);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--line);
+            padding: 14px 0;
+            transition: background 0.6s var(--ease), border-color 0.6s var(--ease);
+        }
+
+        .gng-nav__inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-weight: 400;
+            font-size: 24px;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--ink);
+        }
+
+        .logo__mark {
+            width: 26px;
+            height: 26px;
+            flex-shrink: 0;
+            color: var(--ink);
+        }
+
+        .logo__sub {
+            font-family: var(--font-mono);
+            font-size: 9.5px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink-mute);
+            margin-left: 4px;
+            align-self: flex-end;
+            padding-bottom: 4px;
+        }
+
+        .gng-nav__links {
+            display: flex;
+            gap: 36px;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .gng-nav__links a {
+            font-size: 13.5px;
+            letter-spacing: 0.01em;
+            color: var(--ink);
+            position: relative;
+            padding: 6px 0;
+            transition: color 0.3s var(--ease);
+        }
+
+        .gng-nav__links a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 100%;
+            bottom: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: right 0.4s var(--ease);
+        }
+
+        .gng-nav__links a:hover {
+            color: var(--accent);
+        }
+
+        .gng-nav__links a:hover::after {
+            right: 0;
+        }
+
+        .gng-nav__tools {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Language switch */
+        .lang-switch {
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid var(--line-strong);
+            border-radius: 999px;
+            padding: 3px;
+            background: transparent;
+        }
+
+        .lang-switch__btn {
+            background: transparent;
+            border: 0;
+            padding: 6px 12px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            color: var(--ink-mute);
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.4s var(--ease);
+            line-height: 1;
+        }
+
+        .lang-switch__btn.active {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* Theme switch */
+        .theme-switch {
+            width: 38px;
+            height: 38px;
+            border-radius: 999px;
+            border: 1px solid var(--line-strong);
+            background: transparent;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--ink);
+            transition: all 0.4s var(--ease);
+            position: relative;
+        }
+
+        .theme-switch:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .theme-switch svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.5s var(--ease), opacity 0.3s var(--ease);
+            position: absolute;
+        }
+
+        [data-bs-theme="dark"] .theme-switch .icon-sun {
+            opacity: 1;
+            transform: rotate(0);
+        }
+
+        [data-bs-theme="dark"] .theme-switch .icon-moon {
+            opacity: 0;
+            transform: rotate(-90deg);
+        }
+
+        [data-bs-theme="light"] .theme-switch .icon-sun {
+            opacity: 0;
+            transform: rotate(90deg);
+        }
+
+        [data-bs-theme="light"] .theme-switch .icon-moon {
+            opacity: 1;
+            transform: rotate(0);
+        }
+
+        .nav__cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px 10px 20px;
+            border: 1px solid var(--line-strong);
+            border-radius: 999px;
+            font-size: 13px;
+            letter-spacing: 0.02em;
+            transition: all 0.4s var(--ease);
+            color: var(--ink);
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .nav__cta:hover {
+            background: var(--accent);
+            color: var(--bg);
+            border-color: var(--accent);
+        }
+
+        .nav__cta svg {
+            transition: transform 0.4s var(--ease);
+        }
+
+        .nav__cta:hover svg {
+            transform: translateX(4px);
+        }
+
+        .gng-nav__toggler {
+            display: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 999px;
+            border: 1px solid var(--line-strong);
+            background: transparent;
+            color: var(--ink);
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gng-nav__toggler svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        @media (max-width: 1100px) {
+            .gng-nav__links a {
+                font-size: 13px;
+            }
+
+            .gng-nav__links {
+                gap: 22px;
+            }
+        }
+
+        @media (max-width: 980px) {
+            .gng-nav__inner {
+                flex-wrap: wrap;
+            }
+
+            .gng-nav__links {
+                order: 5;
+                width: 100%;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+                padding: 16px 0 4px;
+                border-top: 1px solid var(--line);
+                margin-top: 14px;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.5s var(--ease), padding 0.5s var(--ease), margin 0.5s var(--ease);
+                padding-top: 0;
+                padding-bottom: 0;
+                margin-top: 0;
+            }
+
+            .gng-nav.open .gng-nav__links {
+                max-height: 320px;
+                padding-top: 16px;
+                padding-bottom: 8px;
+                margin-top: 14px;
+            }
+
+            .gng-nav__toggler {
+                display: inline-flex;
+            }
+
+            .nav__cta span {
+                display: none;
+            }
+
+            .nav__cta {
+                padding: 10px 12px;
+            }
+        }
+
+        @media (max-width: 540px) {
+            .lang-switch__btn {
+                padding: 5px 9px;
+                font-size: 10.5px;
+            }
+        }
+
+        /* =========================================
+       HERO
+    ========================================= */
+        .hero {
+            position: relative;
+            min-height: calc(100vh - 75px);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            isolation: isolate;
+        }
+
+        .hero__media {
+            position: absolute;
+            inset: 0;
+            z-index: -2;
+        }
+
+        .hero__media video,
+        .hero__media .hero__poster {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero__poster {
+            position: relative;
+            background:
+                radial-gradient(ellipse at 30% 30%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
+                radial-gradient(ellipse at 70% 80%, color-mix(in srgb, var(--accent-warm) 12%, transparent), transparent 55%),
+                linear-gradient(135deg, var(--hero-grad-1) 0%, var(--hero-grad-2) 100%);
+        }
+
+        .hero__poster::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                repeating-linear-gradient(0deg, color-mix(in srgb, var(--accent) 6%, transparent) 0 1px, transparent 1px 4px);
+            mix-blend-mode: screen;
+        }
+
+        .hero__poster::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle at center, transparent 0, color-mix(in srgb, var(--accent) 8%, transparent) 40%, transparent 60%);
+            animation: pulse-ring 6s var(--ease) infinite;
+        }
+
+        @keyframes pulse-ring {
+
+            0%,
+            100% {
+                transform: scale(0.9);
+                opacity: 0.4;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.9;
+            }
+        }
+
+        .hero__overlay {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(180deg,
+                    color-mix(in srgb, var(--bg) 35%, transparent) 0%,
+                    color-mix(in srgb, var(--bg) 30%, transparent) 40%,
+                    var(--bg) 100%);
+        }
+
+        [data-bs-theme="light"] .hero__overlay {
+            background: linear-gradient(180deg,
+                    color-mix(in srgb, var(--bg) 20%, transparent) 0%,
+                    color-mix(in srgb, var(--bg) 50%, transparent) 50%,
+                    var(--bg) 100%);
+        }
+
+        .scan-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            box-shadow: 0 0 24px var(--accent);
+            opacity: 0.55;
+            animation: scan 7s var(--ease) infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% {
+                top: 0%;
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.55;
+            }
+
+            90% {
+                opacity: 0.55;
+            }
+
+            100% {
+                top: 100%;
+                opacity: 0;
+            }
+        }
+
+        .hero__content {
+            position: relative;
+            z-index: 2;
+            padding-bottom: 90px;
+            padding-top: 100px;
+        }
+
+        .hero__title {
+            font-family: var(--font-display);
+            font-weight: 300;
+            font-size: clamp(48px, 9vw, 124px);
+            line-height: 0.92;
+            letter-spacing: -0.035em;
+            max-width: 14ch;
+            font-variation-settings: "opsz" 144;
+            margin: 0;
+        }
+
+        .hero__title em {
+            font-style: italic;
+            font-weight: 400;
+            color: var(--accent);
+            font-variation-settings: "opsz" 144;
+        }
+
+        .hero__caption {
+            max-width: 380px;
+            font-size: 15px;
+            color: var(--ink-mute);
+            line-height: 1.65;
+            margin: 0;
+        }
+
+        .hero__caption-meta {
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero__caption-meta::before {
+            content: '';
+            width: 24px;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        .hero__cta-row {
+            margin-top: 30px;
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .btn-gng {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 24px;
+            font-size: 13.5px;
+            letter-spacing: 0.02em;
+            border-radius: 999px;
+            transition: all 0.4s var(--ease);
+            border: 1px solid transparent;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-gng--primary {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .btn-gng--primary:hover {
+            background: transparent;
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .btn-gng--ghost {
+            border-color: var(--line-strong);
+            color: var(--ink);
+            background: transparent;
+        }
+
+        .btn-gng--ghost:hover {
+            border-color: var(--ink);
+        }
+
+        .hero__bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-top: 1px solid var(--line);
+            padding: 18px var(--gutter);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 2;
+            background: linear-gradient(to top, color-mix(in srgb, var(--bg) 55%, transparent), transparent);
+        }
+
+        .hero__scroll {
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            letter-spacing: 0.14em;
+            color: var(--ink-mute);
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero__scroll-line {
+            width: 60px;
+            height: 1px;
+            background: var(--ink-faint);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero__scroll-line::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--accent);
+            transform: translateX(-100%);
+            animation: scroll-line 2.6s var(--ease) infinite;
+        }
+
+        @keyframes scroll-line {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            60%,
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        @media (max-width: 880px) {
+            .hero__bottom {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+        }
+
+        /* =========================================
+       SECTION SHELL
+    ========================================= */
+        section.module {
+            padding: clamp(80px, 11vw, 160px) 0;
+            position: relative;
+            border-top: 1px solid var(--line);
+        }
+
+        .module__title {
+            font-family: var(--font-display);
+            font-weight: 300;
+            font-size: clamp(36px, 5.5vw, 72px);
+            line-height: 1;
+            letter-spacing: -0.025em;
+            max-width: 12ch;
+            font-variation-settings: "opsz" 144;
+            margin: 0;
+        }
+
+        .module__title em {
+            font-style: italic;
+            font-weight: 400;
+            color: var(--accent);
+            font-variation-settings: "opsz" 144;
+        }
+
+        .module__intro {
+            max-width: 460px;
+            color: var(--ink-mute);
+            font-size: 15.5px;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* =========================================
+       PATENTS
+    ========================================= */
+        .patents {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            border-top: 1px solid var(--line-strong);
+            border-left: 1px solid var(--line-strong);
+        }
+
+        .patent {
+            padding: 38px 32px 44px;
+            border-right: 1px solid var(--line-strong);
+            border-bottom: 1px solid var(--line-strong);
+            position: relative;
+            transition: background 0.5s var(--ease);
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .patent:hover {
+            background: var(--bg-elev);
+        }
+
+        .patent:hover .patent__num {
+            color: var(--accent);
+        }
+
+        .patent__num {
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            letter-spacing: 0.14em;
+            color: var(--ink-mute);
+            text-transform: uppercase;
+            transition: color 0.4s var(--ease);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .patent__num .badge-gng {
+            font-size: 9.5px;
+            padding: 3px 9px;
+            border: 1px solid var(--line-accent);
+            color: var(--accent);
+            border-radius: 999px;
+            background: transparent;
+        }
+
+        .patent__title {
+            font-family: var(--font-display);
+            font-weight: 400;
+            font-size: 26px;
+            line-height: 1.15;
+            letter-spacing: -0.015em;
+            margin: 80px 0 16px;
+            max-width: 18ch;
+            font-variation-settings: "opsz" 36;
+        }
+
+        .patent__desc {
+            color: var(--ink-mute);
+            font-size: 14px;
+            line-height: 1.65;
+            margin: 0;
+        }
+
+        .patent__arrow {
+            position: absolute;
+            top: 32px;
+            right: 28px;
+            width: 22px;
+            height: 22px;
+            opacity: 0;
+            transform: translate(-6px, 6px);
+            transition: all 0.5s var(--ease);
+            color: var(--accent);
+        }
+
+        .patent:hover .patent__arrow {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+
+        @media (max-width: 1080px) {
+            .patents {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 720px) {
+            .patents {
+                grid-template-columns: 1fr;
+            }
+
+            .patent {
+                min-height: 240px;
+                padding: 30px 24px;
+            }
+
+            .patent__title {
+                margin-top: 50px;
+                font-size: 22px;
+            }
+        }
+
+        /* =========================================
+       ARTICLES
+    ========================================= */
+        .article-feature {
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            background: var(--bg-card);
+            cursor: pointer;
+            display: block;
+            color: inherit;
+        }
+
+        .article-feature__img {
+            position: relative;
+            aspect-ratio: 4 / 3;
+            overflow: hidden;
+        }
+
+        .article-feature__img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1.2s var(--ease);
+            filter: saturate(0.85) brightness(0.85);
+        }
+
+        [data-bs-theme="light"] .article-feature__img img {
+            filter: saturate(0.95) brightness(0.95);
+        }
+
+        .article-feature:hover .article-feature__img img {
+            transform: scale(1.06);
+        }
+
+        .article-feature__img::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, color-mix(in srgb, var(--bg) 80%, transparent), transparent 50%);
+        }
+
+        .article-feature__body {
+            padding: 32px 32px 36px;
+        }
+
+        .article-meta {
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink-mute);
+            display: flex;
+            gap: 18px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .article-meta .accent {
+            color: var(--accent);
+        }
+
+        .article-feature__title {
+            font-family: var(--font-display);
+            font-weight: 400;
+            font-size: 32px;
+            line-height: 1.15;
+            letter-spacing: -0.015em;
+            margin-bottom: 14px;
+            max-width: 20ch;
+            transition: color 0.4s var(--ease);
+            font-variation-settings: "opsz" 36;
+        }
+
+        .article-feature:hover .article-feature__title {
+            color: var(--accent);
+        }
+
+        .article-feature__excerpt {
+            color: var(--ink-mute);
+            font-size: 14.5px;
+            line-height: 1.7;
+            max-width: 50ch;
+            margin: 0;
+        }
+
+        .article-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .article {
+            padding: 26px 0;
+            border-top: 1px solid var(--line);
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 22px;
+            cursor: pointer;
+            transition: padding 0.4s var(--ease);
+            color: inherit;
+        }
+
+        .article:last-child {
+            border-bottom: 1px solid var(--line);
+        }
+
+        .article:hover {
+            padding-left: 8px;
+        }
+
+        .article:hover .article__title {
+            color: var(--accent);
+        }
+
+        .article__thumb {
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            background: var(--bg-card);
+        }
+
+        .article__thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: saturate(0.7) brightness(0.85);
+            transition: transform 1s var(--ease);
+        }
+
+        [data-bs-theme="light"] .article__thumb img {
+            filter: saturate(0.9) brightness(1);
+        }
+
+        .article:hover .article__thumb img {
+            transform: scale(1.08);
+        }
+
+        .article__title {
+            font-family: var(--font-display);
+            font-weight: 400;
+            font-size: 19px;
+            line-height: 1.25;
+            letter-spacing: -0.012em;
+            margin: 8px 0;
+            transition: color 0.4s var(--ease);
+            font-variation-settings: "opsz" 24;
+        }
+
+        /* =========================================
+       GALLERY
+    ========================================= */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-auto-rows: 140px;
+            gap: 16px;
+        }
+
+        .tile {
+            position: relative;
+            overflow: hidden;
+            background: var(--bg-card);
+            cursor: pointer;
+            border-radius: 2px;
+            display: block;
+        }
+
+        .tile img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1.2s var(--ease), filter 0.6s var(--ease);
+            filter: grayscale(0.3) saturate(0.85) brightness(0.78);
+        }
+
+        [data-bs-theme="light"] .tile img {
+            filter: grayscale(0.1) saturate(0.95) brightness(0.95);
+        }
+
+        .tile:hover img {
+            transform: scale(1.05);
+            filter: grayscale(0) saturate(1) brightness(0.92);
+        }
+
+        [data-bs-theme="light"] .tile:hover img {
+            filter: grayscale(0) saturate(1.05) brightness(1.02);
+        }
+
+        .tile::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, color-mix(in srgb, var(--bg) 75%, transparent) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .tile__caption {
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            bottom: 16px;
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink);
+            z-index: 1;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(8px);
+            opacity: 0.85;
+            transition: all 0.5s var(--ease);
+        }
+
+        .tile:hover .tile__caption {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .tile__caption .accent {
+            color: var(--accent);
+        }
+
+        .tile.t-1 {
+            grid-column: span 5;
+            grid-row: span 3;
+        }
+
+        .tile.t-2 {
+            grid-column: span 4;
+            grid-row: span 2;
+        }
+
+        .tile.t-3 {
+            grid-column: span 3;
+            grid-row: span 2;
+        }
+
+        .tile.t-4 {
+            grid-column: span 3;
+            grid-row: span 2;
+        }
+
+        .tile.t-5 {
+            grid-column: span 4;
+            grid-row: span 2;
+        }
+
+        .tile.t-6 {
+            grid-column: span 5;
+            grid-row: span 2;
+        }
+
+        .tile.t-7 {
+            grid-column: span 7;
+            grid-row: span 2;
+        }
+
+        @media (max-width: 880px) {
+            .gallery {
+                grid-template-columns: repeat(6, 1fr);
+                grid-auto-rows: 120px;
+            }
+
+            .tile.t-1,
+            .tile.t-2,
+            .tile.t-3,
+            .tile.t-4,
+            .tile.t-5,
+            .tile.t-6,
+            .tile.t-7 {
+                grid-column: span 6;
+                grid-row: span 2;
+            }
+        }
+
+        /* =========================================
+       PEOPLE
+    ========================================= */
+        .people {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            border-top: 1px solid var(--line-strong);
+            border-left: 1px solid var(--line-strong);
+        }
+
+        .person {
+            padding: 36px 28px 30px;
+            border-right: 1px solid var(--line-strong);
+            border-bottom: 1px solid var(--line-strong);
+            transition: background 0.5s var(--ease);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .person:hover {
+            background: var(--bg-elev);
+        }
+
+        .person__avatar {
+            aspect-ratio: 1 / 1;
+            width: 100%;
+            border-radius: 2px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg,
+                    color-mix(in srgb, var(--ink) 6%, var(--bg)) 0%,
+                    color-mix(in srgb, var(--ink) 2%, var(--bg)) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.7s var(--ease);
+        }
+
+        [data-bs-theme="dark"] .person__avatar {
+            background: linear-gradient(135deg, #1a2330 0%, #0d141d 100%);
+        }
+
+        .person:hover .person__avatar {
+            transform: translateY(-4px);
+        }
+
+        .person__avatar::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at top, color-mix(in srgb, var(--accent) 20%, transparent), transparent 60%);
+        }
+
+        .person__avatar::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.5s var(--ease);
+        }
+
+        .person:hover .person__avatar::after {
+            opacity: 1;
+        }
+
+        .person__initials {
+            font-family: var(--font-display);
+            font-weight: 300;
+            font-size: 64px;
+            letter-spacing: -0.02em;
+            color: var(--ink);
+            position: relative;
+            z-index: 1;
+            font-variation-settings: "opsz" 72;
+        }
+
+        .person__num {
+            position: absolute;
+            top: 18px;
+            left: 24px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            color: var(--ink-mute);
+            z-index: 2;
+        }
+
+        .person__name {
+            font-family: var(--font-display);
+            font-weight: 400;
+            font-size: 22px;
+            line-height: 1.15;
+            letter-spacing: -0.012em;
+            margin-bottom: 6px;
+            font-variation-settings: "opsz" 28;
+        }
+
+        .person__role {
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 14px;
+        }
+
+        .person__bio {
+            color: var(--ink-mute);
+            font-size: 13.5px;
+            line-height: 1.65;
+            margin: 0;
+        }
+
+        @media (max-width: 1080px) {
+            .people {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 540px) {
+            .people {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* =========================================
+       CONTACT + MAP
+    ========================================= */
+        .contact-block {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 0;
+            border: 1px solid var(--line-strong);
+        }
+
+        .contact-info {
+            padding: 56px 48px;
+            display: flex;
+            flex-direction: column;
+            gap: 36px;
+            border-right: 1px solid var(--line-strong);
+            background: var(--bg-elev);
+        }
+
+        .contact-info__title {
+            font-family: var(--font-display);
+            font-weight: 300;
+            font-size: clamp(34px, 4vw, 52px);
+            line-height: 1.05;
+            letter-spacing: -0.025em;
+            max-width: 14ch;
+            font-variation-settings: "opsz" 60;
+            margin: 0;
+        }
+
+        .contact-info__title em {
+            font-style: italic;
+            color: var(--accent);
+            font-weight: 400;
+        }
+
+        .contact-row {
+            border-top: 1px solid var(--line);
+            padding-top: 18px;
+        }
+
+        .contact-row__label {
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink-mute);
+            margin-bottom: 8px;
+        }
+
+        .contact-row__value {
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--ink);
+        }
+
+        .contact-row__value a {
+            transition: color 0.3s var(--ease);
+            border-bottom: 1px solid transparent;
+        }
+
+        .contact-row__value a:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .map {
+            position: relative;
+            min-height: 480px;
+            background: var(--bg-card);
+        }
+
+        .map iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            position: absolute;
+            inset: 0;
+        }
+
+        [data-bs-theme="dark"] .map iframe {
+            filter: invert(0.92) hue-rotate(180deg) saturate(0.6) brightness(0.95) contrast(0.95);
+        }
+
+        .map__pin {
+            position: absolute;
+            bottom: 24px;
+            left: 24px;
+            background: var(--bg);
+            border: 1px solid var(--line-strong);
+            padding: 14px 18px;
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink);
+            z-index: 2;
+            max-width: 240px;
+            line-height: 1.6;
+        }
+
+        .map__pin .accent {
+            color: var(--accent);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        @media (max-width: 980px) {
+            .contact-block {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info {
+                border-right: 0;
+                border-bottom: 1px solid var(--line-strong);
+                padding: 40px 28px;
+            }
+
+            .map {
+                min-height: 360px;
+            }
+        }
+
+        /* =========================================
+       FOOTER
+    ========================================= */
+        footer {
+            border-top: 1px solid var(--line);
+            padding: 40px 0 32px;
+            background: var(--bg);
+        }
+
+        .footer__brand {
+            max-width: 360px;
+        }
+
+        .footer__brand p {
+            font-size: 13px;
+            color: var(--ink-mute);
+            margin-top: 14px;
+            line-height: 1.6;
+        }
+
+        .footer__cols {
+            display: flex;
+            gap: 56px;
+            flex-wrap: wrap;
+        }
+
+        .footer__col h5 {
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink-mute);
+            margin-bottom: 16px;
+            font-weight: 400;
+        }
+
+        .footer__col ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer__col ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer__col ul a {
+            font-size: 13.5px;
+            color: var(--ink);
+            transition: color 0.3s var(--ease);
+        }
+
+        .footer__col ul a:hover {
+            color: var(--accent);
+        }
+
+        .footer__base {
+            margin-top: 50px;
+            padding-top: 22px;
+            border-top: 1px solid var(--line);
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink-mute);
+        }
+
+        .footer__base .accent {
+            color: var(--accent);
+        }
+
+        /* =========================================
+       NOISE TEXTURE
+    ========================================= */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.93  0 0 0 0 0.9  0 0 0 0 0.85  0 0 0 0.05 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+            opacity: var(--noise-opacity);
+            mix-blend-mode: var(--noise-blend);
+            pointer-events: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== NAV ===== -->
+    <nav class="gng-nav" id="gngNav">
+        <div class="wrap">
+            <div class="gng-nav__inner">
+                <a href="#" class="logo" aria-label="GNG Technology">
+                    <span class="logo__mark" aria-hidden="true">
+                        <svg viewBox="0 0 32 32" fill="none">
+                            <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="1" />
+                            <circle cx="16" cy="16" r="7" stroke="currentColor" stroke-width="1" />
+                            <circle cx="16" cy="16" r="2" fill="#5fe9d0" />
+                            <path d="M16 0v6M16 26v6M0 16h6M26 16h6" stroke="currentColor" stroke-width="1" />
+                        </svg>
+                    </span>
+                    GNG<span class="logo__sub">Technology</span>
+                </a>
+
+                <ul class="gng-nav__links" id="navLinks">
+                    <li><a href="#technology" data-i18n="nav.technology">Technology</a></li>
+                    <li><a href="#articles" data-i18n="nav.insights">Insights</a></li>
+                    <li><a href="#gallery" data-i18n="nav.gallery">Gallery</a></li>
+                    <li><a href="#leadership" data-i18n="nav.leadership">Leadership</a></li>
+                    <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
+                </ul>
+
+                <div class="gng-nav__tools">
+                    <!-- Language switch -->
+                    <div class="lang-switch" role="group" aria-label="Language">
+                        <button class="lang-switch__btn active" data-lang="en" type="button">EN</button>
+                        <button class="lang-switch__btn" data-lang="tr" type="button">TR</button>
+                    </div>
+
+                    <!-- Theme switch -->
+                    <button class="theme-switch" id="themeToggle" type="button" aria-label="Toggle theme">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="4" />
+                            <path
+                                d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                        </svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                        </svg>
+                    </button>
+
+                    <a href="#contact" class="nav__cta">
+                        <span data-i18n="nav.cta">Request Demo</span>
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                            <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.4"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </a>
+
+                    <button class="gng-nav__toggler" id="navToggler" type="button" aria-label="Menu">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                            stroke-linecap="round">
+                            <path d="M3 6h18M3 12h18M3 18h18" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== CAREERS ===== -->
+    <header class="hero" style="min-height: 40vh; align-items: flex-end; padding-bottom: 50px;">
+        <div class="hero__overlay"></div>
+        <div class="scan-line"></div>
+        <div class="wrap hero__content" style="z-index: 10;">
+            <h1 class="hero__title">
+                <span data-i18n="career.hero.title">Careers at</span><br>
+                <em class="accent">GNG Technology</em>
+            </h1>
+        </div>
+    </header>
+
+    <section class="module" style="padding-top: 50px;">
+        <div class="wrap">
+            {% if jobs %}
+                <div style="display: flex; flex-direction: column; gap: 40px; z-index: 10; position: relative;">
+                {% for job in jobs %}
+                    <div style="border: 1px solid var(--line-strong); padding: 40px; background: var(--bg-card);">
+                        <h2 style="font-family: var(--font-display); font-size: 32px; color: var(--accent); margin-top: 0;" data-i18n="job_{{ job.id }}_title">{{ job.title_en }}</h2>
+                        <div style="margin-top: 20px;">
+                            <h4 style="color: var(--ink-mute); font-family: var(--font-mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase;" data-i18n="career.label.desc">Job Description</h4>
+                            <p style="white-space: pre-line;" data-i18n="job_{{ job.id }}_desc">{{ job.description_en }}</p>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <h4 style="color: var(--ink-mute); font-family: var(--font-mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase;" data-i18n="career.label.req">Requirements</h4>
+                            <p style="white-space: pre-line;" data-i18n="job_{{ job.id }}_req">{{ job.requirements_en }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            {% else %}
+                <p data-i18n="career.no_jobs" style="z-index: 10; position: relative;">There are no open positions at the moment. Please check back later.</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="wrap">
+            <div class="row g-4 g-lg-5 justify-content-between">
+                <div class="col-lg-4">
+                    <div class="footer__brand">
+                        <a href="#" class="logo">
+                            <span class="logo__mark" aria-hidden="true">
+                                <svg viewBox="0 0 32 32" fill="none">
+                                    <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="1" />
+                                    <circle cx="16" cy="16" r="7" stroke="currentColor" stroke-width="1" />
+                                    <circle cx="16" cy="16" r="2" fill="#5fe9d0" />
+                                    <path d="M16 0v6M16 26v6M0 16h6M26 16h6" stroke="currentColor" stroke-width="1" />
+                                </svg>
+                            </span>
+                            GNG<span class="logo__sub">Technology</span>
+                        </a>
+                        <p data-i18n="footer.tagline">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Patented medical imaging
+                            systems engineered at METU Technopark.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <div class="footer__cols">
+                        <div class="footer__col">
+                            <h5 data-i18n="footer.col.company">Company</h5>
+                            <ul>
+                                <li><a href="#" data-i18n="footer.link.about">About</a></li>
+                                <li><a href="#technology" data-i18n="nav.technology">Technology</a></li>
+                                <li><a href="#articles" data-i18n="nav.insights">Insights</a></li>
+                                <li><a href="#leadership" data-i18n="nav.leadership">Leadership</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer__col">
+                            <h5 data-i18n="footer.col.resources">Resources</h5>
+                            <ul>
+                                <li><a href="#" data-i18n="footer.link.patents">Patents</a></li>
+                                <li><a href="#" data-i18n="footer.link.whitepapers">Whitepapers</a></li>
+                                <li><a href="#" data-i18n="footer.link.press">Press Kit</a></li>
+                                <li><a href="#" data-i18n="footer.link.careers">Careers</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer__col">
+                            <h5 data-i18n="footer.col.connect">Connect</h5>
+                            <ul>
+                                <li><a href="#">LinkedIn</a></li>
+                                <li><a href="#">X · Twitter</a></li>
+                                <li><a href="#">YouTube</a></li>
+                                <li><a href="#">GitHub</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer__base">
+                <span data-i18n="footer.copyright">© 2026 GNG Technology · All rights reserved</span>
+                <span><span class="accent">●</span>&nbsp;&nbsp;<span data-i18n="footer.made">Made at METU Technopark ·
+                        Ankara</span></span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        /* =========================================
+           I18N
+        ========================================= */
+        const i18n = {
+            en: {
+                'nav.technology': 'Technology',
+                'nav.insights': 'Insights',
+                'nav.gallery': 'Gallery',
+                'nav.leadership': 'Leadership',
+                'nav.contact': 'Contact',
+                'nav.cta': 'Request Demo',
+
+                'hero.title.line1': {{ hero.title_line1_en | tojson if hero else '"Imaging the"' }},
+        'hero.title.line2': {{ hero.title_line2_en | tojson if hero else '"invisible."' }},
+        'hero.location': {{ hero.location_en | tojson if hero else '"METU Technopark · Ankara"' }},
+        'hero.caption': {{ hero.caption_en | tojson if hero else '"Lorem ipsum dolor sit amet..."' }},
+        'hero.cta.primary': 'Explore Technology',
+            'hero.cta.secondary': 'Careers',
+                'hero.scroll': 'Scroll',
+                    'hero.tagline': '© GNG Technology · Patented Imaging Systems',
+
+                        'tech.label': '01 — Technology',
+                            'tech.title.a': 'Patents that',
+                                'tech.title.b': 'see further.',
+                                    'tech.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua — quis nostrud exercitation ullamco laboris.',
+
+                                                'career.hero.title': 'Careers at',
+        'career.label.desc': 'Job Description',
+        'career.label.req': 'Requirements',
+        'career.no_jobs': 'There are no open positions at the moment. Please check back later.',
+        {% for job in jobs %}
+        'job_{{ job.id }}_title': {{ job.title_en | tojson }},
+        'job_{{ job.id }}_desc': {{ job.description_en | tojson }},
+        'job_{{ job.id }}_req': {{ job.requirements_en | tojson }},
+        {% endfor %}
+
+        'articles.label': '02 — Insights',
+            'articles.title.a': 'Research,',
+                'articles.title.b': 'published.',
+                    'articles.intro': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore.',
+                        'articles.cat.whitepaper': 'Whitepaper',
+                            'articles.cat.case': 'Case Study',
+                                'articles.cat.press': 'Press',
+                                    'articles.cat.article': 'Article',
+                                        'articles.cat.research': 'Research',
+                                            'articles.read1': '14 min read',
+
+                                                'gallery.label': '03 — Visual Archive',
+                                                    'gallery.title.a': 'From the',
+                                                        'gallery.title.b': 'scanner.',
+                                                            'gallery.intro': 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos.',
+
+                                                                'people.label': '04 — Leadership',
+                                                                    'people.title.a': 'The minds',
+                                                                        'people.title.b': 'behind it.',
+                                                                            'people.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.',
+                                                                                'people.role.ceo': 'CEO · Co-founder',
+                                                                                    'people.role.cto': 'CTO · Co-founder',
+                                                                                        'people.role.science': 'Chief Scientist',
+                                                                                            'people.role.eng': 'Head of Engineering',
+                                                                                                'people.role.clinical': 'Clinical Lead',
+                                                                                                    'people.role.regulatory': 'Head of Regulatory',
+                                                                                                        'people.role.product': 'VP, Product',
+                                                                                                            'people.role.research': 'Director, Research',
+
+                                                                                                                'contact.label': '05 — Contact',
+                                                                                                                    'contact.title.a': "Let's",
+                                                                                                                        'contact.title.b': 'talk.',
+                                                                                                                            'contact.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam.',
+                                                                                                                                'contact.headline.a': 'METU Technopark,',
+                                                                                                                                    'contact.headline.b': 'Ankara.',
+                                                                                                                                        'contact.address.label': 'Address',
+                                                                                                                                            'contact.address.value': 'METU Technopark, Block A · No 12<br>Üniversiteler Mh. · Çankaya<br>06800 Ankara · Türkiye',
+                                                                                                                                                'contact.general.label': 'General Inquiries',
+                                                                                                                                                    'contact.press.label': 'Press & Partnerships',
+                                                                                                                                                        'contact.phone.label': 'Phone',
+                                                                                                                                                            'contact.coords.label': 'Coordinates',
+                                                                                                                                                                'map.pin.title': '● GNG · METU Technopark',
+                                                                                                                                                                    'map.pin.sub': 'Block A · 39.8917° N · 32.7833° E',
+
+                                                                                                                                                                        'footer.tagline': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Patented medical imaging systems engineered at METU Technopark.',
+                                                                                                                                                                            'footer.col.company': 'Company',
+                                                                                                                                                                                'footer.col.resources': 'Resources',
+                                                                                                                                                                                    'footer.col.connect': 'Connect',
+                                                                                                                                                                                        'footer.link.about': 'About',
+                                                                                                                                                                                            'footer.link.patents': 'Patents',
+                                                                                                                                                                                                'footer.link.whitepapers': 'Whitepapers',
+                                                                                                                                                                                                    'footer.link.press': 'Press Kit',
+                                                                                                                                                                                                        'footer.link.careers': 'Careers',
+                                                                                                                                                                                                            'footer.copyright': '© 2026 GNG Technology · All rights reserved',
+                                                                                                                                                                                                                'footer.made': 'Made at METU Technopark · Ankara'
+            },
+        tr: {
+            'nav.technology': 'Teknoloji',
+                'nav.insights': 'İçgörüler',
+                    'nav.gallery': 'Galeri',
+                        'nav.leadership': 'Ekibimiz',
+                            'nav.contact': 'İletişim',
+                                'nav.cta': 'Demo Talep Et',
+
+                                    'hero.title.line1': {{ hero.title_line1_tr | tojson if hero else '"Görünmeyeni"' }},
+            'hero.title.line2': {{ hero.title_line2_tr | tojson if hero else '"görüntülemek."' }},
+            'hero.location': {{ hero.location_tr | tojson if hero else '"ODTÜ Teknokent · Ankara"' }},
+            'hero.caption': {{ hero.caption_tr | tojson if hero else '"Lorem ipsum dolor sit amet..."' }},
+            'hero.cta.primary': 'Teknolojiyi Keşfet',
+                'hero.cta.secondary': 'Kariyer',
+                    'hero.scroll': 'Aşağı Kaydır',
+                        'hero.tagline': '© GNG Technology · Patentli Görüntüleme Sistemleri',
+
+                            'tech.label': '01 — Teknoloji',
+                                'tech.title.a': 'Daha ilerisini',
+                                    'tech.title.b': 'gören patentler.',
+                                        'tech.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua — quis nostrud exercitation ullamco laboris.',
+
+                                                    'career.hero.title': 'Kariyer -',
+        'career.label.desc': 'Görev Tanımı',
+        'career.label.req': 'Yetkinlikler',
+        'career.no_jobs': 'Şu anda açık pozisyon bulunmamaktadır. Lütfen daha sonra tekrar kontrol edin.',
+        {% for job in jobs %}
+        'job_{{ job.id }}_title': {{ job.title_tr | tojson }},
+        'job_{{ job.id }}_desc': {{ job.description_tr | tojson }},
+        'job_{{ job.id }}_req': {{ job.requirements_tr | tojson }},
+        {% endfor %}
+
+        'articles.label': '02 — İçgörüler',
+            'articles.title.a': 'Yayımlanmış',
+                'articles.title.b': 'araştırmalar.',
+                    'articles.intro': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore.',
+                        'articles.cat.whitepaper': 'Teknik Rapor',
+                            'articles.cat.case': 'Vaka Çalışması',
+                                'articles.cat.press': 'Basın',
+                                    'articles.cat.article': 'Makale',
+                                        'articles.cat.research': 'Araştırma',
+                                            'articles.read1': '14 dk okuma',
+
+                                                'gallery.label': '03 — Görsel Arşiv',
+                                                    'gallery.title.a': 'Tarayıcıdan',
+                                                        'gallery.title.b': 'kareler.',
+                                                            'gallery.intro': 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos.',
+
+                                                                'people.label': '04 — Ekibimiz',
+                                                                    'people.title.a': 'Arkasındaki',
+                                                                        'people.title.b': 'zihinler.',
+                                                                            'people.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.',
+                                                                                'people.role.ceo': 'CEO · Kurucu Ortak',
+                                                                                    'people.role.cto': 'CTO · Kurucu Ortak',
+                                                                                        'people.role.science': 'Bilimsel Direktör',
+                                                                                            'people.role.eng': 'Mühendislik Direktörü',
+                                                                                                'people.role.clinical': 'Klinik Lider',
+                                                                                                    'people.role.regulatory': 'Regülasyon Direktörü',
+                                                                                                        'people.role.product': 'Ürün Başkan Yrd.',
+                                                                                                            'people.role.research': 'Araştırma Direktörü',
+
+                                                                                                                'contact.label': '05 — İletişim',
+                                                                                                                    'contact.title.a': 'Hadi',
+                                                                                                                        'contact.title.b': 'konuşalım.',
+                                                                                                                            'contact.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam.',
+                                                                                                                                'contact.headline.a': 'ODTÜ Teknokent,',
+                                                                                                                                    'contact.headline.b': 'Ankara.',
+                                                                                                                                        'contact.address.label': 'Adres',
+                                                                                                                                            'contact.address.value': 'ODTÜ Teknokent, A Blok · No 12<br>Üniversiteler Mh. · Çankaya<br>06800 Ankara · Türkiye',
+                                                                                                                                                'contact.general.label': 'Genel İletişim',
+                                                                                                                                                    'contact.press.label': 'Basın & İş Birlikleri',
+                                                                                                                                                        'contact.phone.label': 'Telefon',
+                                                                                                                                                            'contact.coords.label': 'Koordinatlar',
+                                                                                                                                                                'map.pin.title': '● GNG · ODTÜ Teknokent',
+                                                                                                                                                                    'map.pin.sub': 'A Blok · 39.8917° K · 32.7833° D',
+
+                                                                                                                                                                        'footer.tagline': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ODTÜ Teknokent\'te geliştirilen patentli tıbbi görüntüleme sistemleri.',
+                                                                                                                                                                            'footer.col.company': 'Şirket',
+                                                                                                                                                                                'footer.col.resources': 'Kaynaklar',
+                                                                                                                                                                                    'footer.col.connect': 'Bağlan',
+                                                                                                                                                                                        'footer.link.about': 'Hakkımızda',
+                                                                                                                                                                                            'footer.link.patents': 'Patentler',
+                                                                                                                                                                                                'footer.link.whitepapers': 'Teknik Raporlar',
+                                                                                                                                                                                                    'footer.link.press': 'Basın Kiti',
+                                                                                                                                                                                                        'footer.link.careers': 'Kariyer',
+                                                                                                                                                                                                            'footer.copyright': '© 2026 GNG Technology · Tüm hakları saklıdır',
+                                                                                                                                                                                                                'footer.made': 'ODTÜ Teknokent\'te üretildi · Ankara'
+            }
+        };
+
+        // Safe storage helpers (work even when localStorage is restricted)
+        const store = {
+            get(key) {
+                try { return localStorage.getItem(key); } catch (e) { return null; }
+            },
+            set(key, value) {
+                try { localStorage.setItem(key, value); } catch (e) { }
+            }
+        };
+
+        /* =========================================
+           LANGUAGE TOGGLE
+        ========================================= */
+        function applyLang(lang) {
+            const dict = i18n[lang] || i18n.en;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key] != null) el.textContent = dict[key];
+            });
+            document.querySelectorAll('[data-i18n-html]').forEach(el => {
+                const key = el.getAttribute('data-i18n-html');
+                if (dict[key] != null) el.innerHTML = dict[key];
+            });
+            document.documentElement.setAttribute('lang', lang);
+            document.querySelectorAll('.lang-switch__btn').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+            });
+            store.set('gng-lang', lang);
+        }
+
+        document.querySelectorAll('.lang-switch__btn').forEach(btn => {
+            btn.addEventListener('click', () => applyLang(btn.getAttribute('data-lang')));
+        });
+
+        /* =========================================
+           THEME TOGGLE
+        ========================================= */
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-bs-theme', theme);
+            store.set('gng-theme', theme);
+        }
+
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-bs-theme');
+            applyTheme(current === 'dark' ? 'light' : 'dark');
+        });
+
+        /* =========================================
+           MOBILE NAV TOGGLE
+        ========================================= */
+        document.getElementById('navToggler').addEventListener('click', () => {
+            document.getElementById('gngNav').classList.toggle('open');
+        });
+        document.querySelectorAll('.gng-nav__links a').forEach(a => {
+            a.addEventListener('click', () => {
+                document.getElementById('gngNav').classList.remove('open');
+            });
+        });
+
+        /* =========================================
+           REVEAL ON SCROLL
+        ========================================= */
+        (function () {
+            const targets = document.querySelectorAll('.reveal');
+            if (!('IntersectionObserver' in window)) {
+                targets.forEach(t => t.classList.add('in'));
+                return;
+            }
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in');
+                        io.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+            targets.forEach(t => io.observe(t));
+        })();
+
+        /* =========================================
+           INIT — restore preferences (or use system)
+        ========================================= */
+        (function init() {
+            const savedTheme = store.get('gng-theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            applyTheme(savedTheme || (prefersDark ? 'dark' : 'dark')); // default dark
+
+            const savedLang = store.get('gng-lang');
+            const browserLang = (navigator.language || 'en').slice(0, 2).toLowerCase();
+            applyLang(savedLang || (browserLang === 'tr' ? 'tr' : 'en'));
+        })();
+    </script>
+</body>
+
+</html>
