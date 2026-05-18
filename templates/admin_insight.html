@@ -133,15 +133,9 @@
                     <label style="margin: 0; font-size: 16px;">{{ form.is_active.label.text }}</label>
                 </div>
                 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
-                    <div class="form-group">
-                        {{ form.order_num.label }}
-                        {{ form.order_num(class="form-control") }}
-                    </div>
-                    <div class="form-group">
-                        {{ form.link.label }}
-                        {{ form.link(class="form-control") }}
-                    </div>
+                <div class="form-group">
+                    {{ form.order_num.label }}
+                    {{ form.order_num(class="form-control") }}
                 </div>
 
                 <div class="form-group">
