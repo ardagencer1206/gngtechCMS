@@ -46,6 +46,26 @@ with app.app_context():
         db.session.commit()
     except Exception:
         db.session.rollback()
+        
+    new_contact_columns = [
+        "phone_label_tr VARCHAR(100)",
+        "phone_label_en VARCHAR(100)",
+        "phone_number VARCHAR(50)",
+        "coords_label_tr VARCHAR(100)",
+        "coords_label_en VARCHAR(100)",
+        "coords_value_tr VARCHAR(100)",
+        "coords_value_en VARCHAR(100)",
+        "map_pin_title_tr VARCHAR(100)",
+        "map_pin_title_en VARCHAR(100)",
+        "map_pin_sub_tr VARCHAR(100)",
+        "map_pin_sub_en VARCHAR(100)"
+    ]
+    for col in new_contact_columns:
+        try:
+            db.session.execute(text(f'ALTER TABLE contact_content ADD COLUMN {col}'))
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
 
     if not HeroContent.query.first():
         default_hero = HeroContent()
