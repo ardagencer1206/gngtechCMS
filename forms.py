@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, TextAreaField, SubmitField, SelectField, BooleanField
 from wtforms.validators import DataRequired
 
@@ -49,5 +50,31 @@ class LeadershipMemberForm(FlaskForm):
     role_en = StringField('Rol (EN)', validators=[DataRequired()])
     bio_tr = TextAreaField('Biyografi (TR)', validators=[DataRequired()])
     bio_en = TextAreaField('Biyografi (EN)', validators=[DataRequired()])
+    is_active = BooleanField('Aktif', default=True)
+    submit = SubmitField('Kaydet')
+
+class InsightContentForm(FlaskForm):
+    title_a_tr = StringField('Başlık İlk Kısım (TR)', validators=[DataRequired()])
+    title_a_en = StringField('Başlık İlk Kısım (EN)', validators=[DataRequired()])
+    title_b_tr = StringField('Başlık İkinci Kısım (TR)', validators=[DataRequired()])
+    title_b_en = StringField('Başlık İkinci Kısım (EN)', validators=[DataRequired()])
+    intro_tr = TextAreaField('Giriş Metni (TR)', validators=[DataRequired()])
+    intro_en = TextAreaField('Giriş Metni (EN)', validators=[DataRequired()])
+    submit = SubmitField('Kaydet')
+
+class InsightArticleForm(FlaskForm):
+    order_num = StringField('Sıra No', validators=[DataRequired()])
+    image_file = FileField('Makale Görseli', validators=[FileAllowed(['jpg', 'png', 'jpeg'], 'Sadece görseller (JPG, PNG) yüklenebilir.')])
+    category_tr = StringField('Kategori (TR)', validators=[DataRequired()])
+    category_en = StringField('Kategori (EN)', validators=[DataRequired()])
+    date_tr = StringField('Tarih (TR)', validators=[DataRequired()])
+    date_en = StringField('Tarih (EN)', validators=[DataRequired()])
+    read_time_tr = StringField('Okuma Süresi (TR) - İsteğe Bağlı')
+    read_time_en = StringField('Okuma Süresi (EN) - İsteğe Bağlı')
+    title_tr = StringField('Başlık (TR)', validators=[DataRequired()])
+    title_en = StringField('Başlık (EN)', validators=[DataRequired()])
+    excerpt_tr = TextAreaField('Kısa Açıklama (TR) - İsteğe Bağlı')
+    excerpt_en = TextAreaField('Kısa Açıklama (EN) - İsteğe Bağlı')
+    link = StringField('Makale Linki')
     is_active = BooleanField('Aktif', default=True)
     submit = SubmitField('Kaydet')
