@@ -1651,7 +1651,7 @@
                 <div class="col-lg-7">
                     {% for article in insight_articles %}
                     {% if loop.index == 1 %}
-                    <a href="{{ article.link if article.link and article.link != '#' else url_for('insight_detail', id=article.id) }}" class="article-feature">
+                    <a href="{{ url_for('insight_detail', id=article.id) }}" class="article-feature">
                         <div class="article-feature__img">
                             {% if article.image_file %}
                             <img src="{{ url_for('static', filename='uploads/insights/' + article.image_file) }}" alt="" loading="lazy">
@@ -1681,7 +1681,7 @@
                     <div class="article-list">
                         {% for article in insight_articles %}
                         {% if loop.index > 1 %}
-                        <a href="{{ article.link if article.link and article.link != '#' else url_for('insight_detail', id=article.id) }}" class="article">
+                        <a href="{{ url_for('insight_detail', id=article.id) }}" class="article">
                             <div class="article__thumb">
                                 {% if article.image_file %}
                                 <img src="{{ url_for('static', filename='uploads/insights/' + article.image_file) }}" alt="" loading="lazy">
