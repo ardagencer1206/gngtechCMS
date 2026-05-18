@@ -1,8 +1,8 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.utils import secure_filename
-from models import db, HeroContent, Patent, JobPosting, LeadershipContent, LeadershipMember, InsightContent, InsightArticle, GalleryContent, GalleryItem
-from forms import HeroContentForm, PatentForm, JobPostingForm, LeadershipContentForm, LeadershipMemberForm, InsightContentForm, InsightArticleForm, GalleryContentForm, GalleryItemForm
+from models import db, HeroContent, Patent, JobPosting, LeadershipContent, LeadershipMember, InsightContent, InsightArticle, GalleryContent, GalleryItem, ContactContent
+from forms import HeroContentForm, PatentForm, JobPostingForm, LeadershipContentForm, LeadershipMemberForm, InsightContentForm, InsightArticleForm, GalleryContentForm, GalleryItemForm, ContactContentForm
 
 app = Flask(__name__)
 
@@ -122,6 +122,11 @@ with app.app_context():
         db.session.add(default_gallery_item)
         db.session.commit()
 
+    if not ContactContent.query.first():
+        default_contact_content = ContactContent()
+        db.session.add(default_contact_content)
+        db.session.commit()
+
 # --- ROTASLAR (ROUTES) ---
 
 @app.route('/')
@@ -134,7 +139,8 @@ def index():
     insight_articles = InsightArticle.query.filter_by(is_active=True).order_by(InsightArticle.order_num).all()
     gallery_content = GalleryContent.query.first()
     gallery_items = GalleryItem.query.filter_by(is_active=True).order_by(GalleryItem.order_num).all()
-    return render_template('index.html', hero=hero, patents=patents, leadership_content=leadership_content, leadership_members=leadership_members, insight_content=insight_content, insight_articles=insight_articles, gallery_content=gallery_content, gallery_items=gallery_items)
+    contact_content = ContactContent.query.first()
+    return render_template('index.html', hero=hero, patents=patents, leadership_content=leadership_content, leadership_members=leadership_members, insight_content=insight_content, insight_articles=insight_articles, gallery_content=gallery_content, gallery_items=gallery_items, contact_content=contact_content)
 
 @app.route('/insight/<int:id>')
 def insight_detail(id):
@@ -196,7 +202,10 @@ def admin():
     gallery_form = GalleryContentForm(obj=gallery_content)
     gallery_items = GalleryItem.query.all()
     
-    return render_template('admin.html', form=form, patents=patents, jobs=jobs, leadership_form=leadership_form, leadership_members=leadership_members, insight_form=insight_form, insight_articles=insight_articles, gallery_form=gallery_form, gallery_items=gallery_items)
+    contact_content = ContactContent.query.first()
+    contact_form = ContactContentForm(obj=contact_content)
+    
+    return render_template('admin.html', form=form, patents=patents, jobs=jobs, leadership_form=leadership_form, leadership_members=leadership_members, insight_form=insight_form, insight_articles=insight_articles, gallery_form=gallery_form, gallery_items=gallery_items, contact_form=contact_form)
 
 @app.route('/admin/patent/add', methods=['GET', 'POST'])
 def admin_patent_add():
@@ -487,6 +496,21 @@ def admin_gallery_delete(id):
     db.session.delete(item)
     db.session.commit()
     flash('Görsel başarıyla silindi!')
+    return redirect(url_for('admin'))
+
+@app.route('/admin/contact_content/edit', methods=['POST'])
+def admin_contact_content_edit():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+        
+    content = ContactContent.query.first()
+    form = ContactContentForm()
+    
+    if form.validate_on_submit():
+        form.populate_obj(content)
+        db.session.commit()
+        flash('İletişim içeriği başarıyla güncellendi!')
+        
     return redirect(url_for('admin'))
 
 
