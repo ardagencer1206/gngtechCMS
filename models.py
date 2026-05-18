@@ -75,5 +75,7 @@ class InsightArticle(db.Model):
     title_en = db.Column(db.String(200), nullable=False)
     excerpt_tr = db.Column(db.Text, nullable=True)
     excerpt_en = db.Column(db.Text, nullable=True)
+    content_tr = db.Column(db.Text, nullable=True)
+    content_en = db.Column(db.Text, nullable=True)
     link = db.Column(db.String(255), nullable=True)
     is_active = db.Column(db.Boolean, default=True)
