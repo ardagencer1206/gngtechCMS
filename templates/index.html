@@ -1636,90 +1636,69 @@
                 <div class="col-lg-7">
                     <div class="section-label"><span data-i18n="articles.label">02 — Insights</span></div>
                     <h2 class="module__title">
-                        <span data-i18n="articles.title.a">Research,</span> <em
-                            data-i18n="articles.title.b">published.</em>
+                        <span data-i18n="articles.title.a">{{ insight_content.title_a_en if insight_content else "Research," }}</span> <em
+                            data-i18n="articles.title.b">{{ insight_content.title_b_en if insight_content else "published." }}</em>
                     </h2>
                 </div>
                 <div class="col-lg-5">
                     <p class="module__intro" data-i18n="articles.intro">
-                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                        laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore.
+                        {{ insight_content.intro_en if insight_content else "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore." }}
                     </p>
                 </div>
             </div>
 
             <div class="row g-4 g-lg-5 reveal">
                 <div class="col-lg-7">
-                    <a href="#" class="article-feature">
+                    {% for article in insight_articles %}
+                    {% if loop.index == 1 %}
+                    <a href="{{ article.link if article.link else '#' }}" class="article-feature">
                         <div class="article-feature__img">
+                            {% if article.image_file %}
+                            <img src="{{ url_for('static', filename='uploads/insights/' + article.image_file) }}" alt="" loading="lazy">
+                            {% else %}
                             <img src="https://picsum.photos/seed/gng-feature/1100/820" alt="" loading="lazy">
+                            {% endif %}
                         </div>
                         <div class="article-feature__body">
                             <div class="article-meta">
-                                <span class="accent" data-i18n="articles.cat.whitepaper">Whitepaper</span>
-                                <span>04 March 2026</span>
-                                <span><span data-i18n="articles.read1">14 min read</span></span>
+                                <span class="accent" data-i18n="insight_{{ article.id }}_category">{{ article.category_en }}</span>
+                                <span data-i18n="insight_{{ article.id }}_date">{{ article.date_en }}</span>
+                                {% if article.read_time_en %}
+                                <span><span data-i18n="insight_{{ article.id }}_read_time">{{ article.read_time_en }}</span></span>
+                                {% endif %}
                             </div>
-                            <h3 class="article-feature__title">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            </h3>
-                            <p class="article-feature__excerpt">
-                                Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                                veniam,
-                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                            <h3 class="article-feature__title" data-i18n="insight_{{ article.id }}_title">{{ article.title_en }}</h3>
+                            <p class="article-feature__excerpt" data-i18n="insight_{{ article.id }}_excerpt">
+                                {{ article.excerpt_en }}
                             </p>
                         </div>
                     </a>
+                    {% endif %}
+                    {% endfor %}
                 </div>
 
                 <div class="col-lg-5">
                     <div class="article-list">
-                        <a href="#" class="article">
-                            <div class="article__thumb"><img src="https://picsum.photos/seed/gng-art-1/300/300" alt=""
-                                    loading="lazy"></div>
+                        {% for article in insight_articles %}
+                        {% if loop.index > 1 %}
+                        <a href="{{ article.link if article.link else '#' }}" class="article">
+                            <div class="article__thumb">
+                                {% if article.image_file %}
+                                <img src="{{ url_for('static', filename='uploads/insights/' + article.image_file) }}" alt="" loading="lazy">
+                                {% else %}
+                                <img src="https://picsum.photos/seed/gng-art-{{ loop.index }}/300/300" alt="" loading="lazy">
+                                {% endif %}
+                            </div>
                             <div>
                                 <div class="article-meta">
-                                    <span class="accent" data-i18n="articles.cat.case">Case Study</span>
-                                    <span>21 Feb 2026</span>
+                                    <span class="accent" data-i18n="insight_{{ article.id }}_category">{{ article.category_en }}</span>
+                                    <span data-i18n="insight_{{ article.id }}_date">{{ article.date_en }}</span>
                                 </div>
-                                <h4 class="article__title">Excepteur sint occaecat cupidatat non proident sunt.</h4>
+                                <h4 class="article__title" data-i18n="insight_{{ article.id }}_title">{{ article.title_en }}</h4>
                             </div>
                         </a>
-
-                        <a href="#" class="article">
-                            <div class="article__thumb"><img src="https://picsum.photos/seed/gng-art-2/300/300" alt=""
-                                    loading="lazy"></div>
-                            <div>
-                                <div class="article-meta">
-                                    <span class="accent" data-i18n="articles.cat.press">Press</span>
-                                    <span>09 Feb 2026</span>
-                                </div>
-                                <h4 class="article__title">Duis aute irure dolor reprehenderit voluptate velit.</h4>
-                            </div>
-                        </a>
-
-                        <a href="#" class="article">
-                            <div class="article__thumb"><img src="https://picsum.photos/seed/gng-art-3/300/300" alt=""
-                                    loading="lazy"></div>
-                            <div>
-                                <div class="article-meta">
-                                    <span class="accent" data-i18n="articles.cat.article">Article</span>
-                                    <span>28 Jan 2026</span>
-                                </div>
-                                <h4 class="article__title">Quis autem vel eum iure reprehenderit voluptatem.</h4>
-                            </div>
-                        </a>
-
-                        <a href="#" class="article">
-                            <div class="article__thumb"><img src="https://picsum.photos/seed/gng-art-4/300/300" alt=""
-                                    loading="lazy"></div>
-                            <div>
-                                <div class="article-meta">
-                                    <span class="accent" data-i18n="articles.cat.research">Research</span>
-                                    <span>14 Jan 2026</span>
-                                </div>
-                                <h4 class="article__title">Neque porro quisquam est qui dolorem ipsum quia.</h4>
-                            </div>
-                        </a>
+                        {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -1995,15 +1974,16 @@
         {% endfor %}
 
         'articles.label': '02 — Insights',
-            'articles.title.a': 'Research,',
-                'articles.title.b': 'published.',
-                    'articles.intro': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore.',
-                        'articles.cat.whitepaper': 'Whitepaper',
-                            'articles.cat.case': 'Case Study',
-                                'articles.cat.press': 'Press',
-                                    'articles.cat.article': 'Article',
-                                        'articles.cat.research': 'Research',
-                                            'articles.read1': '14 min read',
+            'articles.title.a': {{ insight_content.title_a_en | tojson if insight_content else '"Research,"' }},
+                'articles.title.b': {{ insight_content.title_b_en | tojson if insight_content else '"published."' }},
+                    'articles.intro': {{ insight_content.intro_en | tojson if insight_content else '"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore."' }},
+                        {% for article in insight_articles %}
+                        'insight_{{ article.id }}_category': {{ article.category_en | tojson }},
+                        'insight_{{ article.id }}_date': {{ article.date_en | tojson }},
+                        'insight_{{ article.id }}_read_time': {{ article.read_time_en | tojson if article.read_time_en else '""' }},
+                        'insight_{{ article.id }}_title': {{ article.title_en | tojson }},
+                        'insight_{{ article.id }}_excerpt': {{ article.excerpt_en | tojson if article.excerpt_en else '""' }},
+                        {% endfor %}
 
                                                 'gallery.label': '03 — Visual Archive',
                                                     'gallery.title.a': 'From the',
@@ -2078,15 +2058,16 @@
         {% endfor %}
 
         'articles.label': '02 — İçgörüler',
-            'articles.title.a': 'Yayımlanmış',
-                'articles.title.b': 'araştırmalar.',
-                    'articles.intro': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore.',
-                        'articles.cat.whitepaper': 'Teknik Rapor',
-                            'articles.cat.case': 'Vaka Çalışması',
-                                'articles.cat.press': 'Basın',
-                                    'articles.cat.article': 'Makale',
-                                        'articles.cat.research': 'Araştırma',
-                                            'articles.read1': '14 dk okuma',
+            'articles.title.a': {{ insight_content.title_a_tr | tojson if insight_content else '"Yayımlanmış"' }},
+                'articles.title.b': {{ insight_content.title_b_tr | tojson if insight_content else '"araştırmalar."' }},
+                    'articles.intro': {{ insight_content.intro_tr | tojson if insight_content else '"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore."' }},
+                        {% for article in insight_articles %}
+                        'insight_{{ article.id }}_category': {{ article.category_tr | tojson }},
+                        'insight_{{ article.id }}_date': {{ article.date_tr | tojson }},
+                        'insight_{{ article.id }}_read_time': {{ article.read_time_tr | tojson if article.read_time_tr else '""' }},
+                        'insight_{{ article.id }}_title': {{ article.title_tr | tojson }},
+                        'insight_{{ article.id }}_excerpt': {{ article.excerpt_tr | tojson if article.excerpt_tr else '""' }},
+                        {% endfor %}
 
                                                 'gallery.label': '03 — Görsel Arşiv',
                                                     'gallery.title.a': 'Tarayıcıdan',
