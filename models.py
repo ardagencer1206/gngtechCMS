@@ -51,3 +51,29 @@ class LeadershipMember(db.Model):
     bio_tr = db.Column(db.Text, nullable=False)
     bio_en = db.Column(db.Text, nullable=False)
     is_active = db.Column(db.Boolean, default=True)
+
+class InsightContent(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title_a_tr = db.Column(db.String(100), nullable=False, default="Yayımlanmış")
+    title_a_en = db.Column(db.String(100), nullable=False, default="Research,")
+    title_b_tr = db.Column(db.String(100), nullable=False, default="araştırmalar.")
+    title_b_en = db.Column(db.String(100), nullable=False, default="published.")
+    intro_tr = db.Column(db.Text, nullable=False, default="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore.")
+    intro_en = db.Column(db.Text, nullable=False, default="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore.")
+
+class InsightArticle(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order_num = db.Column(db.String(10), nullable=False, default="001")
+    image_file = db.Column(db.String(255), nullable=True) # Optional for now, fallback to default if None
+    category_tr = db.Column(db.String(50), nullable=False)
+    category_en = db.Column(db.String(50), nullable=False)
+    date_tr = db.Column(db.String(50), nullable=False)
+    date_en = db.Column(db.String(50), nullable=False)
+    read_time_tr = db.Column(db.String(50), nullable=True) # Optional
+    read_time_en = db.Column(db.String(50), nullable=True) # Optional
+    title_tr = db.Column(db.String(200), nullable=False)
+    title_en = db.Column(db.String(200), nullable=False)
+    excerpt_tr = db.Column(db.Text, nullable=True)
+    excerpt_en = db.Column(db.Text, nullable=True)
+    link = db.Column(db.String(255), nullable=True)
+    is_active = db.Column(db.Boolean, default=True)
