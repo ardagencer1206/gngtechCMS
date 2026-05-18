@@ -77,7 +77,6 @@ class InsightArticleForm(FlaskForm):
     excerpt_en = TextAreaField('Kısa Açıklama (EN) - İsteğe Bağlı')
     content_tr = TextAreaField('Makale İçeriği (TR)')
     content_en = TextAreaField('Makale İçeriği (EN)')
-    link = StringField('Dış Link (İsteğe Bağlı)')
     is_active = BooleanField('Aktif', default=True)
     submit = SubmitField('Kaydet')
 
