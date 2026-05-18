@@ -597,6 +597,26 @@
                                 {{ contact_form.press_label_tr.label }}
                                 {{ contact_form.press_label_tr(class="form-control") }}
                             </div>
+                            <div class="form-group">
+                                {{ contact_form.phone_label_tr.label }}
+                                {{ contact_form.phone_label_tr(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.coords_label_tr.label }}
+                                {{ contact_form.coords_label_tr(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.coords_value_tr.label }}
+                                {{ contact_form.coords_value_tr(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.map_pin_title_tr.label }}
+                                {{ contact_form.map_pin_title_tr(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.map_pin_sub_tr.label }}
+                                {{ contact_form.map_pin_sub_tr(class="form-control") }}
+                            </div>
                         </div>
                         <div>
                             <h3 style="border-bottom: 2px solid #eee; padding-bottom: 10px; color: #2980b9;">English (EN)</h3>
@@ -636,11 +656,31 @@
                                 {{ contact_form.press_label_en.label }}
                                 {{ contact_form.press_label_en(class="form-control") }}
                             </div>
+                            <div class="form-group">
+                                {{ contact_form.phone_label_en.label }}
+                                {{ contact_form.phone_label_en(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.coords_label_en.label }}
+                                {{ contact_form.coords_label_en(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.coords_value_en.label }}
+                                {{ contact_form.coords_value_en(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.map_pin_title_en.label }}
+                                {{ contact_form.map_pin_title_en(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.map_pin_sub_en.label }}
+                                {{ contact_form.map_pin_sub_en(class="form-control") }}
+                            </div>
                         </div>
                     </div>
                     
                     <div style="margin-top: 20px; border-top: 2px solid #eee; padding-top: 20px;">
-                        <h3 style="color: #2980b9;">Ortak E-posta Bilgileri</h3>
+                        <h3 style="color: #2980b9;">Ortak İletişim Bilgileri</h3>
                         <div class="form-group">
                             {{ contact_form.general_email.label }}
                             {{ contact_form.general_email(class="form-control") }}
@@ -648,6 +688,10 @@
                         <div class="form-group">
                             {{ contact_form.press_email.label }}
                             {{ contact_form.press_email(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ contact_form.phone_number.label }}
+                            {{ contact_form.phone_number(class="form-control") }}
                         </div>
                     </div>
                     
