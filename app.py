@@ -26,9 +26,25 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 # Veritabanı objesini uygulamaya bağlıyoruz
 db.init_app(app)
 
+from sqlalchemy import text
+
 # Uygulama başlarken tabloları ve varsayılan veriyi oluştur
 with app.app_context():
     db.create_all()
+    
+    # Otomatik sütun ekleme (Migration yerine basit çözüm)
+    try:
+        db.session.execute(text('ALTER TABLE insight_article ADD COLUMN content_tr TEXT'))
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+        
+    try:
+        db.session.execute(text('ALTER TABLE insight_article ADD COLUMN content_en TEXT'))
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+
     if not HeroContent.query.first():
         default_hero = HeroContent()
         db.session.add(default_hero)
@@ -82,6 +98,8 @@ with app.app_context():
             title_en="Sample Article Title (Featured)",
             excerpt_tr="Bu örnek bir makale kısa açıklamasıdır.",
             excerpt_en="This is a sample article excerpt.",
+            content_tr="Bu örnek bir makale tam içeriğidir. Admin panelinden düzenleyebilirsiniz.",
+            content_en="This is a sample article full content. You can edit it from the admin panel.",
             link="#"
         )
         db.session.add(default_article)
@@ -98,6 +116,13 @@ def index():
     insight_content = InsightContent.query.first()
     insight_articles = InsightArticle.query.filter_by(is_active=True).order_by(InsightArticle.order_num).all()
     return render_template('index.html', hero=hero, patents=patents, leadership_content=leadership_content, leadership_members=leadership_members, insight_content=insight_content, insight_articles=insight_articles)
+
+@app.route('/insight/<int:id>')
+def insight_detail(id):
+    article = InsightArticle.query.get_or_404(id)
+    if not article.is_active:
+        return redirect(url_for('index'))
+    return render_template('article.html', article=article)
 
 @app.route('/career')
 def career():
