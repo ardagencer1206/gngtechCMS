@@ -1,7 +1,8 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-from models import db, HeroContent, Patent, JobPosting, LeadershipContent, LeadershipMember
-from forms import HeroContentForm, PatentForm, JobPostingForm, LeadershipContentForm, LeadershipMemberForm
+from werkzeug.utils import secure_filename
+from models import db, HeroContent, Patent, JobPosting, LeadershipContent, LeadershipMember, InsightContent, InsightArticle
+from forms import HeroContentForm, PatentForm, JobPostingForm, LeadershipContentForm, LeadershipMemberForm, InsightContentForm, InsightArticleForm
 
 app = Flask(__name__)
 
@@ -18,6 +19,9 @@ db_name = os.environ.get('MYSQLDATABASE', 'railway')
 # Veritabanı URL'sini oluşturuyoruz
 app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+app.config['UPLOAD_FOLDER'] = os.path.join('static', 'uploads', 'insights')
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Veritabanı objesini uygulamaya bağlıyoruz
 db.init_app(app)
@@ -60,6 +64,29 @@ with app.app_context():
         db.session.add(default_member)
         db.session.commit()
 
+    if not InsightContent.query.first():
+        default_insight_content = InsightContent()
+        db.session.add(default_insight_content)
+        db.session.commit()
+
+    if not InsightArticle.query.first():
+        default_article = InsightArticle(
+            order_num="001",
+            category_tr="Vaka Çalışması",
+            category_en="Case Study",
+            date_tr="21 Şub 2026",
+            date_en="21 Feb 2026",
+            read_time_tr="14 dk okuma",
+            read_time_en="14 min read",
+            title_tr="Örnek Makale Başlığı (Öne Çıkan)",
+            title_en="Sample Article Title (Featured)",
+            excerpt_tr="Bu örnek bir makale kısa açıklamasıdır.",
+            excerpt_en="This is a sample article excerpt.",
+            link="#"
+        )
+        db.session.add(default_article)
+        db.session.commit()
+
 # --- ROTASLAR (ROUTES) ---
 
 @app.route('/')
@@ -67,8 +94,10 @@ def index():
     hero = HeroContent.query.first()
     patents = Patent.query.all()
     leadership_content = LeadershipContent.query.first()
-    leadership_members = LeadershipMember.query.filter_by(is_active=True).all()
-    return render_template('index.html', hero=hero, patents=patents, leadership_content=leadership_content, leadership_members=leadership_members)
+    leadership_members = LeadershipMember.query.filter_by(is_active=True).order_by(LeadershipMember.order_num).all()
+    insight_content = InsightContent.query.first()
+    insight_articles = InsightArticle.query.filter_by(is_active=True).order_by(InsightArticle.order_num).all()
+    return render_template('index.html', hero=hero, patents=patents, leadership_content=leadership_content, leadership_members=leadership_members, insight_content=insight_content, insight_articles=insight_articles)
 
 @app.route('/career')
 def career():
@@ -114,7 +143,12 @@ def admin():
     patents = Patent.query.all()
     jobs = JobPosting.query.all()
     leadership_members = LeadershipMember.query.all()
-    return render_template('admin.html', form=form, patents=patents, jobs=jobs, leadership_form=leadership_form, leadership_members=leadership_members)
+    
+    insight_content = InsightContent.query.first()
+    insight_form = InsightContentForm(obj=insight_content)
+    insight_articles = InsightArticle.query.all()
+    
+    return render_template('admin.html', form=form, patents=patents, jobs=jobs, leadership_form=leadership_form, leadership_members=leadership_members, insight_form=insight_form, insight_articles=insight_articles)
 
 @app.route('/admin/patent/add', methods=['GET', 'POST'])
 def admin_patent_add():
@@ -258,6 +292,80 @@ def admin_leadership_delete(id):
     db.session.delete(member)
     db.session.commit()
     flash('Ekip üyesi başarıyla silindi!')
+    return redirect(url_for('admin'))
+
+
+@app.route('/admin/insight_content/edit', methods=['POST'])
+def admin_insight_content_edit():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+        
+    content = InsightContent.query.first()
+    form = InsightContentForm()
+    
+    if form.validate_on_submit():
+        form.populate_obj(content)
+        db.session.commit()
+        flash('Yayımlanmış Makaleler içeriği başarıyla güncellendi!')
+        
+    return redirect(url_for('admin'))
+
+@app.route('/admin/insight/add', methods=['GET', 'POST'])
+def admin_insight_add():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+        
+    form = InsightArticleForm()
+    if form.validate_on_submit():
+        article = InsightArticle()
+        form.populate_obj(article)
+        
+        if form.image_file.data:
+            filename = secure_filename(form.image_file.data.filename)
+            form.image_file.data.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            article.image_file = filename
+            
+        db.session.add(article)
+        db.session.commit()
+        flash('Yeni makale başarıyla eklendi!')
+        return redirect(url_for('admin'))
+        
+    return render_template('admin_insight.html', form=form, action="Ekle")
+
+@app.route('/admin/insight/edit/<int:id>', methods=['GET', 'POST'])
+def admin_insight_edit(id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+        
+    article = InsightArticle.query.get_or_404(id)
+    form = InsightArticleForm(obj=article)
+    
+    if form.validate_on_submit():
+        old_image = article.image_file
+        form.populate_obj(article)
+        
+        if form.image_file.data:
+            filename = secure_filename(form.image_file.data.filename)
+            form.image_file.data.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            article.image_file = filename
+        else:
+            article.image_file = old_image
+            
+        db.session.commit()
+        flash('Makale başarıyla güncellendi!')
+        return redirect(url_for('admin'))
+        
+    return render_template('admin_insight.html', form=form, action="Düzenle", article=article)
+
+@app.route('/admin/insight/delete/<int:id>', methods=['POST'])
+def admin_insight_delete(id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+        
+    article = InsightArticle.query.get_or_404(id)
+    db.session.delete(article)
+    db.session.commit()
+    flash('Makale başarıyla silindi!')
     return redirect(url_for('admin'))
 
 
