@@ -349,6 +349,103 @@
         </div>
 
         <div class="card" style="margin-top: 20px;">
+            <h2>Yayımlanmış Makaleler (Insights) İçeriği</h2>
+            <form method="POST" action="{{ url_for('admin_insight_content_edit') }}">
+                {{ insight_form.hidden_tag() }}
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>Türkçe (TR)</h3>
+                        <div class="form-group">
+                            {{ insight_form.title_a_tr.label }}
+                            {{ insight_form.title_a_tr(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ insight_form.title_b_tr.label }}
+                            {{ insight_form.title_b_tr(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ insight_form.intro_tr.label }}
+                            {{ insight_form.intro_tr(class="form-control", style="min-height: 100px;") }}
+                        </div>
+                    </div>
+                    <div>
+                        <h3>English (EN)</h3>
+                        <div class="form-group">
+                            {{ insight_form.title_a_en.label }}
+                            {{ insight_form.title_a_en(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ insight_form.title_b_en.label }}
+                            {{ insight_form.title_b_en(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ insight_form.intro_en.label }}
+                            {{ insight_form.intro_en(class="form-control", style="min-height: 100px;") }}
+                        </div>
+                    </div>
+                </div>
+                
+                {{ insight_form.submit(class="btn-submit") }}
+            </form>
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0;">Makaleler</h2>
+                <a href="{{ url_for('admin_insight_add') }}" class="btn-submit" style="text-decoration: none; margin-top: 0;">Yeni Makale Ekle</a>
+            </div>
+
+            {% if insight_articles %}
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #ddd;">
+                        <th style="padding: 12px 8px;">Sıra</th>
+                        <th style="padding: 12px 8px;">Görsel</th>
+                        <th style="padding: 12px 8px;">Başlık</th>
+                        <th style="padding: 12px 8px;">Kategori</th>
+                        <th style="padding: 12px 8px;">Tarih</th>
+                        <th style="padding: 12px 8px;">Durum</th>
+                        <th style="padding: 12px 8px;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for article in insight_articles %}
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 12px 8px;">{{ article.order_num }}</td>
+                        <td style="padding: 12px 8px;">
+                            {% if article.image_file %}
+                            <img src="{{ url_for('static', filename='uploads/insights/' + article.image_file) }}" alt="Görsel" style="height: 50px; width: 50px; object-fit: cover; border-radius: 4px;">
+                            {% else %}
+                            <div style="height: 50px; width: 50px; background-color: #eee; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999;">Yok</div>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 12px 8px;">{{ article.title_tr }}</td>
+                        <td style="padding: 12px 8px;">{{ article.category_tr }}</td>
+                        <td style="padding: 12px 8px;">{{ article.date_tr }}</td>
+                        <td style="padding: 12px 8px;">
+                            {% if article.is_active %}
+                            <span style="color: #27ae60; font-weight: bold;">Aktif</span>
+                            {% else %}
+                            <span style="color: #e74c3c; font-weight: bold;">Pasif</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 12px 8px; display: flex; gap: 10px; align-items: center; height: 50px;">
+                            <a href="{{ url_for('admin_insight_edit', id=article.id) }}" style="color: #2980b9; text-decoration: none; font-weight: bold;">Düzenle</a>
+                            <form action="{{ url_for('admin_insight_delete', id=article.id) }}" method="POST" style="margin: 0;" onsubmit="return confirm('Bu makaleyi silmek istediğinize emin misiniz?');">
+                                <button type="submit" style="background: none; border: none; color: #e74c3c; cursor: pointer; padding: 0; font-weight: bold; font-family: inherit; font-size: inherit;">Sil</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>Kayıtlı makale bulunmamaktadır.</p>
+            {% endif %}
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
             <a href="{{ url_for('index') }}" style="color: #007bff; text-decoration: none;">&larr; Ana Siteye Dön</a>
         </div>
     </div>
