@@ -1823,13 +1823,13 @@
                     <div class="contact-row">
                         <div class="contact-row__label" data-i18n="contact.phone.label">Phone</div>
                         <div class="contact-row__value">
-                            <a href="tel:+903121234567">+90 312 123 45 67</a>
+                            <a href="tel:{{ contact_content.phone_number.replace(' ', '') if contact_content else '+903121234567' }}">{{ contact_content.phone_number if contact_content else '+90 312 123 45 67' }}</a>
                         </div>
                     </div>
 
                     <div class="contact-row">
                         <div class="contact-row__label" data-i18n="contact.coords.label">Coordinates</div>
-                        <div class="contact-row__value mono" style="font-size: 13px; color: var(--accent);">
+                        <div class="contact-row__value mono" style="font-size: 13px; color: var(--accent);" data-i18n="contact.coords.value">
                             39.8917° N · 32.7833° E
                         </div>
                     </div>
@@ -2009,10 +2009,11 @@
                                                                                                                                             'contact.address.value': {{ contact_content.address_value_en.replace('\n', '<br>') | tojson if contact_content else '"METU Technopark, Block A · No 12<br>Üniversiteler Mh. · Çankaya<br>06800 Ankara · Türkiye"' | safe }},
                                                                                                                                                 'contact.general.label': {{ contact_content.general_label_en | tojson if contact_content else '"General Inquiries"' | safe }},
                                                                                                                                                     'contact.press.label': {{ contact_content.press_label_en | tojson if contact_content else '"Press & Partnerships"' | safe }},
-                                                                                                                                                        'contact.phone.label': 'Phone',
-                                                                                                                                                            'contact.coords.label': 'Coordinates',
-                                                                                                                                                                'map.pin.title': '● GNG · METU Technopark',
-                                                                                                                                                                    'map.pin.sub': 'Block A · 39.8917° N · 32.7833° E',
+                                                                                                                                                        'contact.phone.label': {{ contact_content.phone_label_en | tojson if contact_content else '"Phone"' | safe }},
+                                                                                                                                                            'contact.coords.label': {{ contact_content.coords_label_en | tojson if contact_content else '"Coordinates"' | safe }},
+                                                                                                                                                                'contact.coords.value': {{ contact_content.coords_value_en | tojson if contact_content else '"39.8917° N · 32.7833° E"' | safe }},
+                                                                                                                                                                'map.pin.title': {{ contact_content.map_pin_title_en | tojson if contact_content else '"● GNG · METU Technopark"' | safe }},
+                                                                                                                                                                    'map.pin.sub': {{ contact_content.map_pin_sub_en | tojson if contact_content else '"Block A · 39.8917° N · 32.7833° E"' | safe }},
 
                                                                                                                                                                         'footer.tagline': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Patented medical imaging systems engineered at METU Technopark.',
                                                                                                                                                                             'footer.col.company': 'Company',
@@ -2098,10 +2099,11 @@
                                                                                                                                             'contact.address.value': {{ contact_content.address_value_tr.replace('\n', '<br>') | tojson if contact_content else '"ODTÜ Teknokent, A Blok · No 12<br>Üniversiteler Mh. · Çankaya<br>06800 Ankara · Türkiye"' | safe }},
                                                                                                                                                 'contact.general.label': {{ contact_content.general_label_tr | tojson if contact_content else '"Genel İletişim"' | safe }},
                                                                                                                                                     'contact.press.label': {{ contact_content.press_label_tr | tojson if contact_content else '"Basın & İş Birlikleri"' | safe }},
-                                                                                                                                                        'contact.phone.label': 'Telefon',
-                                                                                                                                                            'contact.coords.label': 'Koordinatlar',
-                                                                                                                                                                'map.pin.title': '● GNG · ODTÜ Teknokent',
-                                                                                                                                                                    'map.pin.sub': 'A Blok · 39.8917° K · 32.7833° D',
+                                                                                                                                                        'contact.phone.label': {{ contact_content.phone_label_tr | tojson if contact_content else '"Telefon"' | safe }},
+                                                                                                                                                            'contact.coords.label': {{ contact_content.coords_label_tr | tojson if contact_content else '"Koordinatlar"' | safe }},
+                                                                                                                                                                'contact.coords.value': {{ contact_content.coords_value_tr | tojson if contact_content else '"39.8917° K · 32.7833° D"' | safe }},
+                                                                                                                                                                'map.pin.title': {{ contact_content.map_pin_title_tr | tojson if contact_content else '"● GNG · ODTÜ Teknokent"' | safe }},
+                                                                                                                                                                    'map.pin.sub': {{ contact_content.map_pin_sub_tr | tojson if contact_content else '"A Blok · 39.8917° K · 32.7833° D"' | safe }},
 
                                                                                                                                                                         'footer.tagline': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ODTÜ Teknokent\'te geliştirilen patentli tıbbi görüntüleme sistemleri.',
                                                                                                                                                                             'footer.col.company': 'Şirket',
