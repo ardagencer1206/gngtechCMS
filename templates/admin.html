@@ -549,6 +549,22 @@
             <a href="{{ url_for('index') }}" style="color: #007bff; text-decoration: none;">&larr; Ana Siteye Dön</a>
         </div>
     </div>
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.getElementById('gallery-header');
+            const content = document.getElementById('gallery-content');
+            if(header && content) {
+                header.addEventListener('click', () => {
+                    if (content.style.display === 'none' || content.style.display === '') {
+                        content.style.display = 'block';
+                        header.querySelector('span').innerHTML = '&#9650;';
+                    } else {
+                        content.style.display = 'none';
+                        header.querySelector('span').innerHTML = '&#9660;';
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
