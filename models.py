@@ -79,3 +79,20 @@ class InsightArticle(db.Model):
     content_en = db.Column(db.Text, nullable=True)
     link = db.Column(db.String(255), nullable=True)
     is_active = db.Column(db.Boolean, default=True)
+
+class GalleryContent(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title_a_tr = db.Column(db.String(100), nullable=False, default="Tarayıcıdan")
+    title_a_en = db.Column(db.String(100), nullable=False, default="From the")
+    title_b_tr = db.Column(db.String(100), nullable=False, default="kareler.")
+    title_b_en = db.Column(db.String(100), nullable=False, default="scanner.")
+    intro_tr = db.Column(db.Text, nullable=False, default="At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos.")
+    intro_en = db.Column(db.Text, nullable=False, default="At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos.")
+
+class GalleryItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order_num = db.Column(db.String(10), nullable=False, default="001")
+    image_file = db.Column(db.String(255), nullable=False)
+    caption_tr = db.Column(db.String(255), nullable=True)
+    caption_en = db.Column(db.String(255), nullable=True)
+    is_active = db.Column(db.Boolean, default=True)
