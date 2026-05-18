@@ -1809,14 +1809,14 @@
                     <div class="contact-row">
                         <div class="contact-row__label" data-i18n="contact.general.label">General Inquiries</div>
                         <div class="contact-row__value">
-                            <a href="mailto:hello@gngtechnology.com">hello@gngtechnology.com</a>
+                            <a href="mailto:{{ contact_content.general_email if contact_content else 'hello@gngtechnology.com' }}">{{ contact_content.general_email if contact_content else 'hello@gngtechnology.com' }}</a>
                         </div>
                     </div>
 
                     <div class="contact-row">
                         <div class="contact-row__label" data-i18n="contact.press.label">Press &amp; Partnerships</div>
                         <div class="contact-row__value">
-                            <a href="mailto:partners@gngtechnology.com">partners@gngtechnology.com</a>
+                            <a href="mailto:{{ contact_content.press_email if contact_content else 'partners@gngtechnology.com' }}">{{ contact_content.press_email if contact_content else 'partners@gngtechnology.com' }}</a>
                         </div>
                     </div>
 
@@ -2000,15 +2000,15 @@
                                                                                 {% endfor %}
 
                                                                                                                 'contact.label': '05 — Contact',
-                                                                                                                    'contact.title.a': "Let's",
-                                                                                                                        'contact.title.b': 'talk.',
-                                                                                                                            'contact.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam.',
-                                                                                                                                'contact.headline.a': 'METU Technopark,',
-                                                                                                                                    'contact.headline.b': 'Ankara.',
-                                                                                                                                        'contact.address.label': 'Address',
-                                                                                                                                            'contact.address.value': 'METU Technopark, Block A · No 12<br>Üniversiteler Mh. · Çankaya<br>06800 Ankara · Türkiye',
-                                                                                                                                                'contact.general.label': 'General Inquiries',
-                                                                                                                                                    'contact.press.label': 'Press & Partnerships',
+                                                                                                                    'contact.title.a': {{ contact_content.title_a_en | tojson if contact_content else '"Let\'s"' | safe }},
+                                                                                                                        'contact.title.b': {{ contact_content.title_b_en | tojson if contact_content else '"talk."' | safe }},
+                                                                                                                            'contact.intro': {{ contact_content.intro_en | tojson if contact_content else '"Lorem ipsum dolor sit amet, consectetur adipiscing elit."' | safe }},
+                                                                                                                                'contact.headline.a': {{ contact_content.headline_a_en | tojson if contact_content else '"METU Technopark,"' | safe }},
+                                                                                                                                    'contact.headline.b': {{ contact_content.headline_b_en | tojson if contact_content else '"Ankara."' | safe }},
+                                                                                                                                        'contact.address.label': {{ contact_content.address_label_en | tojson if contact_content else '"Address"' | safe }},
+                                                                                                                                            'contact.address.value': {{ contact_content.address_value_en.replace('\n', '<br>') | tojson if contact_content else '"METU Technopark, Block A · No 12<br>Üniversiteler Mh. · Çankaya<br>06800 Ankara · Türkiye"' | safe }},
+                                                                                                                                                'contact.general.label': {{ contact_content.general_label_en | tojson if contact_content else '"General Inquiries"' | safe }},
+                                                                                                                                                    'contact.press.label': {{ contact_content.press_label_en | tojson if contact_content else '"Press & Partnerships"' | safe }},
                                                                                                                                                         'contact.phone.label': 'Phone',
                                                                                                                                                             'contact.coords.label': 'Coordinates',
                                                                                                                                                                 'map.pin.title': '● GNG · METU Technopark',
@@ -2089,15 +2089,15 @@
                                                                                 {% endfor %}
 
                                                                                                                 'contact.label': '05 — İletişim',
-                                                                                                                    'contact.title.a': 'Hadi',
-                                                                                                                        'contact.title.b': 'konuşalım.',
-                                                                                                                            'contact.intro': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam.',
-                                                                                                                                'contact.headline.a': 'ODTÜ Teknokent,',
-                                                                                                                                    'contact.headline.b': 'Ankara.',
-                                                                                                                                        'contact.address.label': 'Adres',
-                                                                                                                                            'contact.address.value': 'ODTÜ Teknokent, A Blok · No 12<br>Üniversiteler Mh. · Çankaya<br>06800 Ankara · Türkiye',
-                                                                                                                                                'contact.general.label': 'Genel İletişim',
-                                                                                                                                                    'contact.press.label': 'Basın & İş Birlikleri',
+                                                                                                                    'contact.title.a': {{ contact_content.title_a_tr | tojson if contact_content else '"Hadi"' | safe }},
+                                                                                                                        'contact.title.b': {{ contact_content.title_b_tr | tojson if contact_content else '"konuşalım."' | safe }},
+                                                                                                                            'contact.intro': {{ contact_content.intro_tr | tojson if contact_content else '"Lorem ipsum dolor sit amet, consectetur adipiscing elit."' | safe }},
+                                                                                                                                'contact.headline.a': {{ contact_content.headline_a_tr | tojson if contact_content else '"ODTÜ Teknokent,"' | safe }},
+                                                                                                                                    'contact.headline.b': {{ contact_content.headline_b_tr | tojson if contact_content else '"Ankara."' | safe }},
+                                                                                                                                        'contact.address.label': {{ contact_content.address_label_tr | tojson if contact_content else '"Adres"' | safe }},
+                                                                                                                                            'contact.address.value': {{ contact_content.address_value_tr.replace('\n', '<br>') | tojson if contact_content else '"ODTÜ Teknokent, A Blok · No 12<br>Üniversiteler Mh. · Çankaya<br>06800 Ankara · Türkiye"' | safe }},
+                                                                                                                                                'contact.general.label': {{ contact_content.general_label_tr | tojson if contact_content else '"Genel İletişim"' | safe }},
+                                                                                                                                                    'contact.press.label': {{ contact_content.press_label_tr | tojson if contact_content else '"Basın & İş Birlikleri"' | safe }},
                                                                                                                                                         'contact.phone.label': 'Telefon',
                                                                                                                                                             'contact.coords.label': 'Koordinatlar',
                                                                                                                                                                 'map.pin.title': '● GNG · ODTÜ Teknokent',
