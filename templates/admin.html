@@ -545,25 +545,141 @@
             </div>
         </div>
 
+        </div>
+
+        <div class="card section-toggle" id="contact-header" style="cursor: pointer; margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <h2 style="margin: 0; color: #2c3e50;">İletişim (Contact)</h2>
+            <span style="font-size: 24px;">&#9660;</span>
+        </div>
+
+        <div id="contact-content" style="display: none;">
+            <div class="card" style="margin-top: 20px;">
+                <h2>İletişim Bilgileri (Contact)</h2>
+                <form action="{{ url_for('admin_contact_content_edit') }}" method="POST">
+                    {{ contact_form.hidden_tag() }}
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                        <div>
+                            <h3 style="border-bottom: 2px solid #eee; padding-bottom: 10px; color: #2980b9;">Türkçe (TR)</h3>
+                            <div class="form-group">
+                                {{ contact_form.title_a_tr.label }}
+                                {{ contact_form.title_a_tr(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.title_b_tr.label }}
+                                {{ contact_form.title_b_tr(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.intro_tr.label }}
+                                {{ contact_form.intro_tr(class="form-control", style="min-height: 100px;") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.headline_a_tr.label }}
+                                {{ contact_form.headline_a_tr(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.headline_b_tr.label }}
+                                {{ contact_form.headline_b_tr(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.address_label_tr.label }}
+                                {{ contact_form.address_label_tr(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.address_value_tr.label }}
+                                {{ contact_form.address_value_tr(class="form-control", style="min-height: 100px;") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.general_label_tr.label }}
+                                {{ contact_form.general_label_tr(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.press_label_tr.label }}
+                                {{ contact_form.press_label_tr(class="form-control") }}
+                            </div>
+                        </div>
+                        <div>
+                            <h3 style="border-bottom: 2px solid #eee; padding-bottom: 10px; color: #2980b9;">English (EN)</h3>
+                            <div class="form-group">
+                                {{ contact_form.title_a_en.label }}
+                                {{ contact_form.title_a_en(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.title_b_en.label }}
+                                {{ contact_form.title_b_en(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.intro_en.label }}
+                                {{ contact_form.intro_en(class="form-control", style="min-height: 100px;") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.headline_a_en.label }}
+                                {{ contact_form.headline_a_en(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.headline_b_en.label }}
+                                {{ contact_form.headline_b_en(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.address_label_en.label }}
+                                {{ contact_form.address_label_en(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.address_value_en.label }}
+                                {{ contact_form.address_value_en(class="form-control", style="min-height: 100px;") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.general_label_en.label }}
+                                {{ contact_form.general_label_en(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ contact_form.press_label_en.label }}
+                                {{ contact_form.press_label_en(class="form-control") }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; border-top: 2px solid #eee; padding-top: 20px;">
+                        <h3 style="color: #2980b9;">Ortak E-posta Bilgileri</h3>
+                        <div class="form-group">
+                            {{ contact_form.general_email.label }}
+                            {{ contact_form.general_email(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ contact_form.press_email.label }}
+                            {{ contact_form.press_email(class="form-control") }}
+                        </div>
+                    </div>
+                    
+                    {{ contact_form.submit(class="btn-submit") }}
+                </form>
+            </div>
+        </div>
+
         <div class="card" style="margin-top: 20px;">
             <a href="{{ url_for('index') }}" style="color: #007bff; text-decoration: none;">&larr; Ana Siteye Dön</a>
         </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const header = document.getElementById('gallery-header');
-            const content = document.getElementById('gallery-content');
-            if(header && content) {
-                header.addEventListener('click', () => {
-                    if (content.style.display === 'none' || content.style.display === '') {
-                        content.style.display = 'block';
-                        header.querySelector('span').innerHTML = '&#9650;';
-                    } else {
-                        content.style.display = 'none';
-                        header.querySelector('span').innerHTML = '&#9660;';
-                    }
-                });
+            function setupToggle(headerId, contentId) {
+                const header = document.getElementById(headerId);
+                const content = document.getElementById(contentId);
+                if(header && content) {
+                    header.addEventListener('click', () => {
+                        if (content.style.display === 'none' || content.style.display === '') {
+                            content.style.display = 'block';
+                            header.querySelector('span').innerHTML = '&#9650;';
+                        } else {
+                            content.style.display = 'none';
+                            header.querySelector('span').innerHTML = '&#9660;';
+                        }
+                    });
+                }
             }
+            
+            setupToggle('gallery-header', 'gallery-content');
+            setupToggle('contact-header', 'contact-content');
         });
     </script>
 </body>
