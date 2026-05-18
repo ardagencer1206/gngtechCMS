@@ -80,3 +80,20 @@ class InsightArticleForm(FlaskForm):
     link = StringField('Dış Link (İsteğe Bağlı)')
     is_active = BooleanField('Aktif', default=True)
     submit = SubmitField('Kaydet')
+
+class GalleryContentForm(FlaskForm):
+    title_a_tr = StringField('Başlık İlk Kısım (TR)', validators=[DataRequired()])
+    title_a_en = StringField('Başlık İlk Kısım (EN)', validators=[DataRequired()])
+    title_b_tr = StringField('Başlık İkinci Kısım (TR)', validators=[DataRequired()])
+    title_b_en = StringField('Başlık İkinci Kısım (EN)', validators=[DataRequired()])
+    intro_tr = TextAreaField('Giriş Metni (TR)', validators=[DataRequired()])
+    intro_en = TextAreaField('Giriş Metni (EN)', validators=[DataRequired()])
+    submit = SubmitField('Kaydet')
+
+class GalleryItemForm(FlaskForm):
+    order_num = StringField('Sıra No', validators=[DataRequired()])
+    image_file = FileField('Görsel', validators=[FileAllowed(['jpg', 'png', 'jpeg'], 'Sadece görseller (JPG, PNG) yüklenebilir.')])
+    caption_tr = StringField('Açıklama (TR) - İsteğe Bağlı')
+    caption_en = StringField('Açıklama (EN) - İsteğe Bağlı')
+    is_active = BooleanField('Aktif', default=True)
+    submit = SubmitField('Kaydet')
