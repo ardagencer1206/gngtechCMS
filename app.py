@@ -397,7 +397,7 @@ def admin_insight_add():
         article = InsightArticle()
         form.populate_obj(article)
         
-        if form.image_file.data:
+        if hasattr(form.image_file.data, 'filename') and form.image_file.data.filename:
             filename = secure_filename(form.image_file.data.filename)
             form.image_file.data.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             article.image_file = filename
@@ -421,7 +421,7 @@ def admin_insight_edit(id):
         old_image = article.image_file
         form.populate_obj(article)
         
-        if form.image_file.data:
+        if hasattr(form.image_file.data, 'filename') and form.image_file.data.filename:
             filename = secure_filename(form.image_file.data.filename)
             form.image_file.data.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             article.image_file = filename
@@ -470,7 +470,7 @@ def admin_gallery_add():
         item = GalleryItem()
         form.populate_obj(item)
         
-        if form.image_file.data:
+        if hasattr(form.image_file.data, 'filename') and form.image_file.data.filename:
             filename = secure_filename(form.image_file.data.filename)
             form.image_file.data.save(os.path.join(app.config['GALLERY_UPLOAD_FOLDER'], filename))
             item.image_file = filename
@@ -494,7 +494,7 @@ def admin_gallery_edit(id):
         old_image = item.image_file
         form.populate_obj(item)
         
-        if form.image_file.data:
+        if hasattr(form.image_file.data, 'filename') and form.image_file.data.filename:
             filename = secure_filename(form.image_file.data.filename)
             form.image_file.data.save(os.path.join(app.config['GALLERY_UPLOAD_FOLDER'], filename))
             item.image_file = filename
