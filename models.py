@@ -130,3 +130,14 @@ class ContactContent(db.Model):
     map_pin_title_en = db.Column(db.String(100), default="● GNG · METU Technopark")
     map_pin_sub_tr = db.Column(db.String(100), default="A Blok · 39.8917° K · 32.7833° D")
     map_pin_sub_en = db.Column(db.String(100), default="Block A · 39.8917° N · 32.7833° E")
+
+class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    status = db.Column(db.String(50), nullable=False, default='todo') # todo, in_progress, review, done
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date, nullable=False)
+    progress = db.Column(db.Integer, default=0) # 0 to 100
+    assignee = db.Column(db.String(100), nullable=True)
+    order = db.Column(db.Integer, default=0)
