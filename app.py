@@ -71,6 +71,12 @@ with app.app_context():
         except Exception:
             db.session.rollback()
 
+    try:
+        db.session.execute(text('ALTER TABLE task ADD COLUMN dependencies VARCHAR(255)'))
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+
     if not HeroContent.query.first():
         default_hero = HeroContent()
         db.session.add(default_hero)
@@ -563,7 +569,8 @@ def get_tasks():
             'end_date': t.end_date.strftime('%Y-%m-%d') if t.end_date else '',
             'progress': t.progress,
             'assignee': t.assignee or '',
-            'order': t.order
+            'order': t.order,
+            'dependencies': t.dependencies or ''
         })
     return jsonify(tasks_list)
 
@@ -593,6 +600,10 @@ def create_task():
     status = data.get('status', 'todo')
     max_order = db.session.query(db.func.max(Task.order)).filter_by(status=status).scalar() or 0
 
+    deps = data.get('dependencies', '')
+    if isinstance(deps, list):
+        deps = ",".join(str(d) for d in deps if d)
+
     task = Task(
         title=title,
         description=data.get('description', ''),
@@ -601,7 +612,8 @@ def create_task():
         end_date=end_date,
         progress=int(data.get('progress', 0)),
         assignee=data.get('assignee', ''),
-        order=max_order + 1
+        order=max_order + 1,
+        dependencies=deps
     )
     
     db.session.add(task)
@@ -616,7 +628,8 @@ def create_task():
         'end_date': task.end_date.strftime('%Y-%m-%d'),
         'progress': task.progress,
         'assignee': task.assignee,
-        'order': task.order
+        'order': task.order,
+        'dependencies': task.dependencies or ''
     }), 201
 
 @app.route('/admin/api/tasks/<int:id>', methods=['PUT'])
@@ -671,6 +684,12 @@ def update_task(id):
         
     if 'assignee' in data:
         task.assignee = data['assignee']
+
+    if 'dependencies' in data:
+        deps = data['dependencies']
+        if isinstance(deps, list):
+            deps = ",".join(str(d) for d in deps if d)
+        task.dependencies = deps
         
     db.session.commit()
     
@@ -683,7 +702,8 @@ def update_task(id):
         'end_date': task.end_date.strftime('%Y-%m-%d'),
         'progress': task.progress,
         'assignee': task.assignee,
-        'order': task.order
+        'order': task.order,
+        'dependencies': task.dependencies or ''
     })
 
 @app.route('/admin/api/tasks/reorder', methods=['POST'])
