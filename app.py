@@ -1,7 +1,8 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from datetime import datetime
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from werkzeug.utils import secure_filename
-from models import db, HeroContent, Patent, JobPosting, LeadershipContent, LeadershipMember, InsightContent, InsightArticle, GalleryContent, GalleryItem, ContactContent
+from models import db, HeroContent, Patent, JobPosting, LeadershipContent, LeadershipMember, InsightContent, InsightArticle, GalleryContent, GalleryItem, ContactContent, Task
 from forms import HeroContentForm, PatentForm, JobPostingForm, LeadershipContentForm, LeadershipMemberForm, InsightContentForm, InsightArticleForm, GalleryContentForm, GalleryItemForm, ContactContentForm
 
 app = Flask(__name__)
@@ -12,12 +13,15 @@ app.secret_key = os.environ.get('SECRET_KEY', 'default-dev-secret-key')
 # MySQL bağlantı bilgilerini Railway Variable'larından (ortam değişkenlerinden) alıyoruz
 db_user = os.environ.get('MYSQLUSER', 'root')
 db_password = os.environ.get('MYSQLPASSWORD', '')
-db_host = os.environ.get('MYSQLHOST', 'localhost')
+db_host = os.environ.get('MYSQLHOST')
 db_port = os.environ.get('MYSQLPORT', '3306')
 db_name = os.environ.get('MYSQLDATABASE', 'railway')
 
-# Veritabanı URL'sini oluşturuyoruz
-app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+# Veritabanı URL'sini oluşturuyoruz - MYSQLHOST tanımlı değilse SQLite fallback kullanıyoruz
+if db_host:
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///local_development.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.config['UPLOAD_FOLDER'] = os.path.join('static', 'uploads', 'insights')
@@ -534,7 +538,191 @@ def admin_contact_content_edit():
     return redirect(url_for('admin'))
 
 
+# --- TASK & PLANNING ROUTES ---
+
+@app.route('/admin/tasks')
+def admin_tasks():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    return render_template('admin_tasks.html')
+
+@app.route('/admin/api/tasks', methods=['GET'])
+def get_tasks():
+    if not session.get('logged_in'):
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    tasks = Task.query.order_by(Task.order.asc(), Task.id.asc()).all()
+    tasks_list = []
+    for t in tasks:
+        tasks_list.append({
+            'id': t.id,
+            'title': t.title,
+            'description': t.description or '',
+            'status': t.status,
+            'start_date': t.start_date.strftime('%Y-%m-%d') if t.start_date else '',
+            'end_date': t.end_date.strftime('%Y-%m-%d') if t.end_date else '',
+            'progress': t.progress,
+            'assignee': t.assignee or '',
+            'order': t.order
+        })
+    return jsonify(tasks_list)
+
+@app.route('/admin/api/tasks', methods=['POST'])
+def create_task():
+    if not session.get('logged_in'):
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    data = request.get_json() or {}
+    title = data.get('title')
+    if not title:
+        return jsonify({'error': 'Başlık alanı zorunludur.'}), 400
+        
+    start_date_str = data.get('start_date')
+    end_date_str = data.get('end_date')
+    
+    try:
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date() if start_date_str else datetime.utcnow().date()
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date() if end_date_str else datetime.utcnow().date()
+    except ValueError:
+        return jsonify({'error': 'Geçersiz tarih formatı. YYYY-MM-DD olmalıdır.'}), 400
+        
+    if start_date > end_date:
+        return jsonify({'error': 'Başlangıç tarihi bitiş tarihinden sonra olamaz.'}), 400
+
+    # Get max order in the target status column
+    status = data.get('status', 'todo')
+    max_order = db.session.query(db.func.max(Task.order)).filter_by(status=status).scalar() or 0
+
+    task = Task(
+        title=title,
+        description=data.get('description', ''),
+        status=status,
+        start_date=start_date,
+        end_date=end_date,
+        progress=int(data.get('progress', 0)),
+        assignee=data.get('assignee', ''),
+        order=max_order + 1
+    )
+    
+    db.session.add(task)
+    db.session.commit()
+    
+    return jsonify({
+        'id': task.id,
+        'title': task.title,
+        'description': task.description,
+        'status': task.status,
+        'start_date': task.start_date.strftime('%Y-%m-%d'),
+        'end_date': task.end_date.strftime('%Y-%m-%d'),
+        'progress': task.progress,
+        'assignee': task.assignee,
+        'order': task.order
+    }), 201
+
+@app.route('/admin/api/tasks/<int:id>', methods=['PUT'])
+def update_task(id):
+    if not session.get('logged_in'):
+        return jsonify({'error': 'Unauthorized'}), 401
+        
+    task = Task.query.get_or_404(id)
+    data = request.get_json() or {}
+    
+    if 'title' in data:
+        if not data['title']:
+            return jsonify({'error': 'Başlık alanı zorunludur.'}), 400
+        task.title = data['title']
+        
+    if 'description' in data:
+        task.description = data['description']
+        
+    # Re-order logic if status is changed or order changes
+    old_status = task.status
+    if 'status' in data:
+        new_status = data['status']
+        if new_status not in ['todo', 'in_progress', 'review', 'done']:
+            return jsonify({'error': 'Geçersiz durum.'}), 400
+        
+        if old_status != new_status:
+            task.status = new_status
+            # Auto order to end of new column
+            max_order = db.session.query(db.func.max(Task.order)).filter_by(status=new_status).scalar() or 0
+            task.order = max_order + 1
+            
+    if 'order' in data:
+        task.order = int(data['order'])
+        
+    if 'start_date' in data or 'end_date' in data:
+        start_date_str = data.get('start_date', task.start_date.strftime('%Y-%m-%d'))
+        end_date_str = data.get('end_date', task.end_date.strftime('%Y-%m-%d'))
+        try:
+            start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+            end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+        except ValueError:
+            return jsonify({'error': 'Geçersiz tarih formatı. YYYY-MM-DD olmalıdır.'}), 400
+            
+        if start_date > end_date:
+            return jsonify({'error': 'Başlangıç tarihi bitiş tarihinden sonra olamaz.'}), 400
+            
+        task.start_date = start_date
+        task.end_date = end_date
+        
+    if 'progress' in data:
+        task.progress = min(max(int(data['progress']), 0), 100)
+        
+    if 'assignee' in data:
+        task.assignee = data['assignee']
+        
+    db.session.commit()
+    
+    return jsonify({
+        'id': task.id,
+        'title': task.title,
+        'description': task.description,
+        'status': task.status,
+        'start_date': task.start_date.strftime('%Y-%m-%d'),
+        'end_date': task.end_date.strftime('%Y-%m-%d'),
+        'progress': task.progress,
+        'assignee': task.assignee,
+        'order': task.order
+    })
+
+@app.route('/admin/api/tasks/reorder', methods=['POST'])
+def reorder_tasks():
+    if not session.get('logged_in'):
+        return jsonify({'error': 'Unauthorized'}), 401
+        
+    data = request.get_json() or {}
+    orders = data.get('orders', [])
+    
+    for item in orders:
+        t_id = item.get('id')
+        t_status = item.get('status')
+        t_order = item.get('order')
+        if t_id is not None:
+            task = Task.query.get(t_id)
+            if task:
+                if t_status:
+                    task.status = t_status
+                if t_order is not None:
+                    task.order = int(t_order)
+                    
+    db.session.commit()
+    return jsonify({'status': 'success'})
+
+@app.route('/admin/api/tasks/<int:id>', methods=['DELETE'])
+def delete_task(id):
+    if not session.get('logged_in'):
+        return jsonify({'error': 'Unauthorized'}), 401
+        
+    task = Task.query.get_or_404(id)
+    db.session.delete(task)
+    db.session.commit()
+    
+    return jsonify({'status': 'deleted'})
+
+
 @app.route('/logout')
+
 def logout():
     session.pop('logged_in', None)
     return redirect(url_for('login'))
