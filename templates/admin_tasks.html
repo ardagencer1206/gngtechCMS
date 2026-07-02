@@ -968,6 +968,14 @@
                         <label for="task-form-progress">İlerleme (%) <span id="progress-val">0%</span></label>
                         <input type="range" id="task-form-progress" class="form-control" min="0" max="100" value="0" style="padding: 0; height: auto;">
                     </div>
+
+                    <div class="form-group">
+                        <label for="task-form-dependencies">Bağımlı Olduğu Görevler (Önceki Görevler)</label>
+                        <select id="task-form-dependencies" class="form-control" multiple style="min-height: 80px; padding: 6px 10px;">
+                            <!-- Option elements dynamically generated -->
+                        </select>
+                        <small style="color: var(--ink-mute); font-size: 11px; margin-top: 4px; display: block;">Birden fazla görev seçmek için Ctrl (Windows) veya Cmd (Mac) tuşuna basılı tutun.</small>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -1007,6 +1015,7 @@
             const taskEndInput = document.getElementById('task-form-end');
             const taskProgressInput = document.getElementById('task-form-progress');
             const progressValText = document.getElementById('progress-val');
+            const taskDependenciesInput = document.getElementById('task-form-dependencies');
 
             // Set default dates in form to today and +7 days
             function resetDateInputs() {
@@ -1254,6 +1263,7 @@
                         start: t.start_date,
                         end: t.end_date,
                         progress: isDone ? 100 : (t.progress || 0),
+                        dependencies: t.dependencies ? t.dependencies : '',
                         custom_class: `gantt-bar-${t.status}`
                     };
                 });
@@ -1362,6 +1372,21 @@
             // =========================================
             // MODAL ACTIONS
             // =========================================
+            function populateDependenciesDropdown(excludeId = null, selectedDeps = []) {
+                taskDependenciesInput.innerHTML = '';
+                tasksData.forEach(t => {
+                    if (excludeId && String(t.id) === String(excludeId)) return;
+                    
+                    const opt = document.createElement('option');
+                    opt.value = t.id;
+                    opt.textContent = `#${t.id} - ${t.title}`;
+                    if (selectedDeps.includes(String(t.id))) {
+                        opt.selected = true;
+                    }
+                    taskDependenciesInput.appendChild(opt);
+                });
+            }
+
             function openAddModal() {
                 modalTitleLabel.textContent = 'Yeni Görev Ekle';
                 taskIdInput.value = '';
@@ -1370,6 +1395,7 @@
                 progressValText.textContent = '0%';
                 taskProgressInput.value = 0;
                 taskStatusInput.value = 'todo';
+                populateDependenciesDropdown();
                 modal.classList.add('active');
             }
 
@@ -1384,6 +1410,9 @@
                 taskEndInput.value = task.end_date;
                 taskProgressInput.value = task.progress || 0;
                 progressValText.textContent = (task.progress || 0) + '%';
+                
+                const activeDeps = task.dependencies ? task.dependencies.split(',').map(d => d.trim()) : [];
+                populateDependenciesDropdown(task.id, activeDeps);
                 
                 modal.classList.add('active');
             }
@@ -1421,6 +1450,7 @@
                 }
 
                 const taskId = taskIdInput.value;
+                const selectedDeps = Array.from(taskDependenciesInput.selectedOptions).map(opt => opt.value);
                 const taskData = {
                     title: taskTitleInput.value,
                     description: taskDescInput.value,
@@ -1428,7 +1458,8 @@
                     assignee: taskAssigneeInput.value,
                     start_date: taskStartInput.value,
                     end_date: taskEndInput.value,
-                    progress: parseInt(taskProgressInput.value)
+                    progress: parseInt(taskProgressInput.value),
+                    dependencies: selectedDeps
                 };
 
                 const url = taskId ? `/admin/api/tasks/${taskId}` : '/admin/api/tasks';
