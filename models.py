@@ -141,3 +141,5 @@ class Task(db.Model):
     progress = db.Column(db.Integer, default=0) # 0 to 100
     assignee = db.Column(db.String(100), nullable=True)
     order = db.Column(db.Integer, default=0)
+    dependencies = db.Column(db.String(255), nullable=True)
+
