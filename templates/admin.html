@@ -151,6 +151,22 @@
         .logout-btn:hover::after {
             filter: brightness(0) saturate(100%) invert(4%) sepia(13%) saturate(1133%) hue-rotate(178deg) brightness(95%) contrast(96%);
         }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .nav-link {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink-mute);
+            transition: color 0.3s var(--ease);
+        }
+        .nav-link:hover, .nav-link.active {
+            color: var(--accent);
+        }
 
         @media (max-width: 640px) {
             .navbar { padding: 14px 20px; }
@@ -664,6 +680,10 @@
 
     <div class="navbar">
         <h1>GNG Tech CMS Admin</h1>
+        <div class="nav-links">
+            <a href="{{ url_for('admin') }}" class="nav-link active">İçerik Yönetimi</a>
+            <a href="{{ url_for('admin_tasks') }}" class="nav-link">Görevler & Planlama</a>
+        </div>
         <a href="{{ url_for('logout') }}" class="logout-btn">Çıkış Yap</a>
     </div>
 
