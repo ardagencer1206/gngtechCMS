@@ -1,9 +1,10 @@
 import os
+import uuid
 from datetime import datetime
-from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
-from models import db, HeroContent, Patent, JobPosting, LeadershipContent, LeadershipMember, InsightContent, InsightArticle, GalleryContent, GalleryItem, ContactContent, Task
-from forms import HeroContentForm, PatentForm, JobPostingForm, LeadershipContentForm, LeadershipMemberForm, InsightContentForm, InsightArticleForm, GalleryContentForm, GalleryItemForm, ContactContentForm
+from models import db, HeroContent, Patent, JobPosting, LeadershipContent, LeadershipMember, InsightContent, InsightArticle, GalleryContent, GalleryItem, ContactContent, Task, JobApplication
+from forms import HeroContentForm, PatentForm, JobPostingForm, LeadershipContentForm, LeadershipMemberForm, InsightContentForm, InsightArticleForm, GalleryContentForm, GalleryItemForm, ContactContentForm, JobApplicationForm
 
 app = Flask(__name__)
 
@@ -28,6 +29,8 @@ app.config['UPLOAD_FOLDER'] = os.path.join('static', 'uploads', 'insights')
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 app.config['GALLERY_UPLOAD_FOLDER'] = os.path.join('static', 'uploads', 'gallery')
 os.makedirs(app.config['GALLERY_UPLOAD_FOLDER'], exist_ok=True)
+app.config['CV_UPLOAD_FOLDER'] = os.path.join('static', 'uploads', 'cvs')
+os.makedirs(app.config['CV_UPLOAD_FOLDER'], exist_ok=True)
 
 # Veritabanı objesini uygulamaya bağlıyoruz
 db.init_app(app)
@@ -183,7 +186,42 @@ def insight_detail(id):
 def career():
     hero = HeroContent.query.first()
     jobs = JobPosting.query.filter_by(is_active=True).all()
-    return render_template('career.html', hero=hero, jobs=jobs)
+    form = JobApplicationForm()
+    return render_template('career.html', hero=hero, jobs=jobs, form=form)
+
+@app.route('/career/apply/<int:job_id>', methods=['POST'])
+def career_apply(job_id):
+    job = JobPosting.query.get_or_404(job_id)
+    if not job.is_active:
+        flash('Bu iş ilanı artık aktif değildir.', 'danger')
+        return redirect(url_for('career'))
+
+    form = JobApplicationForm()
+    if form.validate_on_submit():
+        if form.cv_file.data:
+            filename = secure_filename(form.cv_file.data.filename)
+            unique_filename = f"{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:6]}_{filename}"
+            cv_path = os.path.join(app.config['CV_UPLOAD_FOLDER'], unique_filename)
+            form.cv_file.data.save(cv_path)
+
+            application = JobApplication(
+                job_id=job.id,
+                full_name=form.full_name.data,
+                email=form.email.data,
+                phone=form.phone.data,
+                cv_file=unique_filename
+            )
+            db.session.add(application)
+            db.session.commit()
+
+            flash('Başvurunuz başarıyla alındı. İlginiz için teşekkür ederiz!', 'success')
+            return redirect(url_for('career'))
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f"{error}", 'danger')
+
+    return redirect(url_for('career'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -739,6 +777,78 @@ def delete_task(id):
     db.session.commit()
     
     return jsonify({'status': 'deleted'})
+
+
+# --- JOB APPLICATIONS ADMIN ROUTES ---
+
+@app.route('/admin/applications')
+def admin_applications():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    job_id = request.args.get('job_id', type=int)
+    status_filter = request.args.get('status')
+
+    query = JobApplication.query
+    if job_id:
+        query = query.filter_by(job_id=job_id)
+    if status_filter:
+        query = query.filter_by(status=status_filter)
+
+    applications = query.order_by(JobApplication.created_at.desc()).all()
+    jobs = JobPosting.query.all()
+
+    total_count = JobApplication.query.count()
+    new_count = JobApplication.query.filter_by(status='new').count()
+
+    return render_template(
+        'admin_applications.html',
+        applications=applications,
+        jobs=jobs,
+        selected_job_id=job_id,
+        selected_status=status_filter,
+        total_count=total_count,
+        new_count=new_count
+    )
+
+@app.route('/admin/applications/status/<int:id>', methods=['POST'])
+def admin_application_status(id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    application = JobApplication.query.get_or_404(id)
+    new_status = request.form.get('status')
+    if new_status in ['new', 'reviewed', 'interviewed', 'accepted', 'rejected']:
+        application.status = new_status
+        db.session.commit()
+        flash('Başvuru durumu başarıyla güncellendi!')
+
+    return redirect(request.referrer or url_for('admin_applications'))
+
+@app.route('/admin/applications/delete/<int:id>', methods=['POST'])
+def admin_application_delete(id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    application = JobApplication.query.get_or_404(id)
+    if application.cv_file:
+        file_path = os.path.join(app.config['CV_UPLOAD_FOLDER'], application.cv_file)
+        if os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+            except Exception:
+                pass
+
+    db.session.delete(application)
+    db.session.commit()
+    flash('İş başvurusu ve ilişkili CV dosyası silindi!')
+    return redirect(request.referrer or url_for('admin_applications'))
+
+@app.route('/admin/cv/<path:filename>')
+def admin_download_cv(filename):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    return send_from_directory(app.config['CV_UPLOAD_FOLDER'], filename)
 
 
 @app.route('/logout')
