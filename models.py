@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -142,4 +143,16 @@ class Task(db.Model):
     assignee = db.Column(db.String(100), nullable=True)
     order = db.Column(db.Integer, default=0)
     dependencies = db.Column(db.String(255), nullable=True)
+
+class JobApplication(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    job_id = db.Column(db.Integer, db.ForeignKey('job_posting.id'), nullable=False)
+    full_name = db.Column(db.String(150), nullable=False)
+    email = db.Column(db.String(150), nullable=False)
+    phone = db.Column(db.String(50), nullable=False)
+    cv_file = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    status = db.Column(db.String(50), default='new') # new, reviewed, interviewed, rejected, accepted
+
+    job = db.relationship('JobPosting', backref=db.backref('applications', cascade='all, delete-orphan', lazy=True))
 
