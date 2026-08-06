@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GNG Tech CMS - İş Başvuruları</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=DM+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 Icons & CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg:           #0a0d12;
+            --bg-elev:      #10151d;
+            --bg-card:      #141a23;
+            --bg-input:     #0c1118;
+            --ink:          #ece6d8;
+            --ink-mute:     #8b92a3;
+            --ink-faint:    #4a5160;
+            --accent:       #5fe9d0;
+            --accent-warm:  #ffb547;
+            --accent-red:   #ff7a6c;
+            --line:         rgba(236, 230, 216, 0.08);
+            --line-strong:  rgba(236, 230, 216, 0.16);
+            --line-accent:  rgba(95, 233, 208, 0.35);
+
+            --font-display: 'Fraunces', Georgia, serif;
+            --font-body:    'DM Sans', system-ui, -apple-system, sans-serif;
+            --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+            --ease:         cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        body {
+            font-family: var(--font-body);
+            font-size: 15px;
+            line-height: 1.55;
+            background: var(--bg);
+            color: var(--ink);
+            margin: 0;
+            min-height: 100vh;
+            background-image:
+                radial-gradient(ellipse 800px 600px at 100% 0%, color-mix(in srgb, var(--accent) 5%, transparent), transparent 60%),
+                radial-gradient(ellipse 600px 400px at 0% 100%, color-mix(in srgb, var(--accent-warm) 3%, transparent), transparent 60%);
+            background-attachment: fixed;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        .navbar {
+            background: color-mix(in srgb, var(--bg) 80%, transparent);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--line);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-family: var(--font-display);
+            font-weight: 400;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--ink);
+        }
+
+        .navbar h1::before {
+            content: '';
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none'><circle cx='16' cy='16' r='14' stroke='%23ece6d8' stroke-width='1'/><circle cx='16' cy='16' r='7' stroke='%23ece6d8' stroke-width='1'/><circle cx='16' cy='16' r='2' fill='%235fe9d0'/><path d='M16 0v6M16 26v6M0 16h6M26 16h6' stroke='%23ece6d8' stroke-width='1'/></svg>");
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .navbar h1::after {
+            content: 'CMS · Başvurular';
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink-mute);
+            margin-left: 4px;
+            padding-left: 14px;
+            border-left: 1px solid var(--line-strong);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-link {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink-mute);
+            transition: color 0.3s var(--ease);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--accent);
+        }
+
+        .logout-btn {
+            color: var(--ink);
+            background: transparent;
+            padding: 9px 18px;
+            border: 1px solid var(--line-strong);
+            border-radius: 999px;
+            font-size: 12.5px;
+            transition: all 0.4s var(--ease);
+        }
+        .logout-btn:hover {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+            color: var(--bg);
+        }
+
+        .container {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .header-card {
+            background: var(--bg-card);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 28px 32px;
+            margin-bottom: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-title h2 {
+            font-family: var(--font-display);
+            font-size: 28px;
+            margin: 0 0 6px 0;
+            color: var(--ink);
+        }
+
+        .header-title p {
+            margin: 0;
+            color: var(--ink-mute);
+            font-size: 14px;
+        }
+
+        .stat-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 999px;
+            background: var(--bg-elev);
+            border: 1px solid var(--line-strong);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--ink);
+        }
+
+        .stat-badge.highlight {
+            background: color-mix(in srgb, var(--accent) 15%, transparent);
+            border-color: var(--line-accent);
+            color: var(--accent);
+        }
+
+        .filters-bar {
+            background: var(--bg-elev);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .form-select-custom, .form-control-custom {
+            background: var(--bg-input);
+            border: 1px solid var(--line-strong);
+            color: var(--ink);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 13.5px;
+        }
+
+        .form-select-custom:focus {
+            background: var(--bg-input);
+            color: var(--ink);
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent);
+        }
+
+        .app-card {
+            background: var(--bg-card);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 18px;
+            transition: all 0.3s var(--ease);
+        }
+
+        .app-card:hover {
+            border-color: var(--line-accent);
+            transform: translateY(-2px);
+        }
+
+        .applicant-name {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--ink);
+            margin: 0 0 4px 0;
+        }
+
+        .job-title-tag {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: color-mix(in srgb, var(--accent) 12%, transparent);
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+        }
+
+        .meta-item {
+            font-size: 13.5px;
+            color: var(--ink-mute);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .status-pill {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-weight: 500;
+        }
+
+        .status-new { background: rgba(95, 233, 208, 0.15); color: #5fe9d0; border: 1px solid rgba(95, 233, 208, 0.3); }
+        .status-reviewed { background: rgba(255, 181, 71, 0.15); color: #ffb547; border: 1px solid rgba(255, 181, 71, 0.3); }
+        .status-interviewed { background: rgba(87, 181, 231, 0.15); color: #57b5e7; border: 1px solid rgba(87, 181, 231, 0.3); }
+        .status-accepted { background: rgba(72, 207, 137, 0.15); color: #48cf89; border: 1px solid rgba(72, 207, 137, 0.3); }
+        .status-rejected { background: rgba(255, 122, 108, 0.15); color: #ff7a6c; border: 1px solid rgba(255, 122, 108, 0.3); }
+
+        .btn-cv {
+            background: color-mix(in srgb, var(--accent) 15%, transparent);
+            color: var(--accent);
+            border: 1px solid var(--line-accent);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: var(--font-mono);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s var(--ease);
+        }
+        .btn-cv:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .btn-delete-sm {
+            background: transparent;
+            color: var(--accent-red);
+            border: 1px solid color-mix(in srgb, var(--accent-red) 30%, transparent);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            transition: all 0.3s var(--ease);
+        }
+        .btn-delete-sm:hover {
+            background: var(--accent-red);
+            color: var(--bg);
+        }
+
+        .flash-alert {
+            background: color-mix(in srgb, var(--accent) 15%, transparent);
+            border: 1px solid var(--line-accent);
+            color: var(--ink);
+            padding: 14px 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <h1><a href="{{ url_for('admin') }}">GNG Technology</a></h1>
+        <div class="nav-links">
+            <a href="{{ url_for('admin') }}" class="nav-link">CMS Ana Sayfa</a>
+            <a href="{{ url_for('admin_tasks') }}" class="nav-link">Görevler & Planlama</a>
+            <a href="{{ url_for('admin_applications') }}" class="nav-link active">İş Başvuruları</a>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Çıkış Yap</a>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- FLASH MESSAGES -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash-alert">
+                        ⚡ {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- HEADER CARD -->
+        <div class="header-card">
+            <div class="header-title">
+                <h2>İş Başvuruları Yönetimi</h2>
+                <p>Kariyer sayfası üzerinden iletilen tüm CV başvurularını inceleyin ve durumlarını yönetin.</p>
+            </div>
+            <div class="d-flex gap-2">
+                <div class="stat-badge highlight">
+                    <span>Yeni Başvurular:</span>
+                    <strong>{{ new_count }}</strong>
+                </div>
+                <div class="stat-badge">
+                    <span>Toplam Başvuru:</span>
+                    <strong>{{ total_count }}</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- FILTERS BAR -->
+        <form method="GET" action="{{ url_for('admin_applications') }}" class="filters-bar">
+            <div class="d-flex align-items-center gap-2">
+                <label class="small text-uppercase text-muted fw-bold" style="font-family: var(--font-mono); font-size: 11px;">Pozisyon:</label>
+                <select name="job_id" class="form-select-custom" onchange="this.form.submit()">
+                    <option value="">Tüm Pozisyonlar</option>
+                    {% for job in jobs %}
+                        <option value="{{ job.id }}" {% if selected_job_id == job.id %}selected{% endif %}>
+                            {{ job.title_tr }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+                <label class="small text-uppercase text-muted fw-bold" style="font-family: var(--font-mono); font-size: 11px;">Durum:</label>
+                <select name="status" class="form-select-custom" onchange="this.form.submit()">
+                    <option value="">Tüm Durumlar</option>
+                    <option value="new" {% if selected_status == 'new' %}selected{% endif %}>Yeni</option>
+                    <option value="reviewed" {% if selected_status == 'reviewed' %}selected{% endif %}>İncelendi</option>
+                    <option value="interviewed" {% if selected_status == 'interviewed' %}selected{% endif %}>Mülakat Aşamasında</option>
+                    <option value="accepted" {% if selected_status == 'accepted' %}selected{% endif %}>Kabul Edildi</option>
+                    <option value="rejected" {% if selected_status == 'rejected' %}selected{% endif %}>Olumsuz / Red</option>
+                </select>
+            </div>
+
+            {% if selected_job_id or selected_status %}
+                <a href="{{ url_for('admin_applications') }}" class="btn btn-sm btn-outline-secondary ms-auto" style="border-radius: 8px;">Filtreleri Temizle</a>
+            {% endif %}
+        </form>
+
+        <!-- APPLICATIONS LIST -->
+        {% if applications %}
+            {% for app in applications %}
+                <div class="app-card">
+                    <div class="row align-items-center gy-3">
+                        <div class="col-md-5">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="job-title-tag">{{ app.job.title_tr }}</span>
+                                {% if app.status == 'new' %}
+                                    <span class="status-pill status-new">Yeni</span>
+                                {% elif app.status == 'reviewed' %}
+                                    <span class="status-pill status-reviewed">İncelendi</span>
+                                {% elif app.status == 'interviewed' %}
+                                    <span class="status-pill status-interviewed">Mülakat</span>
+                                {% elif app.status == 'accepted' %}
+                                    <span class="status-pill status-accepted">Kabul</span>
+                                {% elif app.status == 'rejected' %}
+                                    <span class="status-pill status-rejected">Red</span>
+                                {% endif %}
+                            </div>
+                            <h3 class="applicant-name">{{ app.full_name }}</h3>
+                            <div class="meta-item">
+                                📧 <a href="mailto:{{ app.email }}" class="text-decoration-none text-light">{{ app.email }}</a>
+                            </div>
+                            <div class="meta-item">
+                                📞 <a href="tel:{{ app.phone }}" class="text-decoration-none text-light">{{ app.phone }}</a>
+                            </div>
+                            <div class="meta-item small opacity-75" style="font-family: var(--font-mono); font-size: 11px;">
+                                🕒 Başvuru Tarihi: {{ app.created_at.strftime('%d.%m.%Y %H:%M') }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 text-md-center">
+                            <a href="{{ url_for('admin_download_cv', filename=app.cv_file) }}" target="_blank" class="btn-cv">
+                                📄 CV İndir / Görüntüle (PDF)
+                            </a>
+                        </div>
+
+                        <div class="col-md-3 text-md-end">
+                            <div class="d-flex flex-column align-items-md-end gap-2">
+                                <!-- Status Update Form -->
+                                <form method="POST" action="{{ url_for('admin_application_status', id=app.id) }}" class="d-flex gap-2 w-100 justify-content-md-end">
+                                    <select name="status" class="form-select-custom form-select-sm" onchange="this.form.submit()">
+                                        <option value="new" {% if app.status == 'new' %}selected{% endif %}>Yeni</option>
+                                        <option value="reviewed" {% if app.status == 'reviewed' %}selected{% endif %}>İncelendi</option>
+                                        <option value="interviewed" {% if app.status == 'interviewed' %}selected{% endif %}>Mülakat</option>
+                                        <option value="accepted" {% if app.status == 'accepted' %}selected{% endif %}>Kabul</option>
+                                        <option value="rejected" {% if app.status == 'rejected' %}selected{% endif %}>Red</option>
+                                    </select>
+                                </form>
+
+                                <!-- Delete Form -->
+                                <form method="POST" action="{{ url_for('admin_application_delete', id=app.id) }}" onsubmit="return confirm('Bu başvuruyu ve CV dosyasını silmek istediğinize emin misiniz?');">
+                                    <button type="submit" class="btn-delete-sm">
+                                        🗑️ Başvuruyu Sil
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="text-center py-5" style="background: var(--bg-card); border: 1px solid var(--line); border-radius: 16px;">
+                <div style="font-size: 40px; margin-bottom: 12px;">📭</div>
+                <h4 style="color: var(--ink);">Henüz başvuru bulunmuyor</h4>
+                <p class="text-muted small mb-0">Seçilen filtrelere uygun ya da henüz iletilmiş bir iş başvurusu bulunmamaktadır.</p>
+            </div>
+        {% endif %}
+
+    </div>
+
+</body>
+</html>
