@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, TextAreaField, SubmitField, SelectField, BooleanField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Email
 
 class HeroContentForm(FlaskForm):
     title_line1_tr = StringField('Başlık Satır 1 (TR)', validators=[DataRequired()])
@@ -130,3 +130,13 @@ class ContactContentForm(FlaskForm):
     map_pin_sub_tr = StringField('Harita İğne Alt Başlığı (TR)', validators=[DataRequired()])
     map_pin_sub_en = StringField('Harita İğne Alt Başlığı (EN)', validators=[DataRequired()])
     submit = SubmitField('Kaydet')
+
+class JobApplicationForm(FlaskForm):
+    full_name = StringField('Ad Soyad', validators=[DataRequired(message="Ad Soyad alanı zorunludur.")])
+    email = StringField('E-posta', validators=[DataRequired(message="E-posta alanı zorunludur."), Email(message="Geçerli bir e-posta adresi giriniz.")])
+    phone = StringField('Telefon Numarası', validators=[DataRequired(message="Telefon alanı zorunludur.")])
+    cv_file = FileField('CV (PDF)', validators=[
+        DataRequired(message="Lütfen PDF formatında CV yükleyiniz."),
+        FileAllowed(['pdf'], 'Sadece PDF formatında CV yükleyebilirsiniz.')
+    ])
+    submit = SubmitField('Başvuruyu Gönder')
